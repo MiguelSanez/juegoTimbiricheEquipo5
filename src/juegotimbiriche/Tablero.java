@@ -14,10 +14,13 @@ public class Tablero extends Juego{
     /**
      * Atributos de la clase Tablero.
      */
-    private double dimension;
-    private double ancho;
-    private double largo;
-    private Cuadro cuadro;
+    private int alturaTablero;
+    private int anchuraTablero;
+    boolean marcaArriba;
+    boolean marcaAbajo;
+    boolean marcaIzquierda;
+    boolean marcaDerecha;
+    boolean cuadroCerrado;
 
     /**
      * Constructor por default de la clase Tablero.
@@ -25,52 +28,86 @@ public class Tablero extends Juego{
     public Tablero() {
     }
 
-    public Tablero(double dimension, double ancho, double largo, Cuadro cuadro) {
-        this.dimension = dimension;
-        this.ancho = ancho;
-        this.largo = largo;
-        this.cuadro = cuadro;
+    /**
+     * Constructor con los atributos de la clase Tablero.
+     * @param marcaArribaN
+     * @param marcaAbajoN
+     * @param marcaIzquierdaN
+     * @param marcaDerechaN
+     * @param cuadroCerradoN 
+     */
+    public Tablero (boolean marcaArribaN, boolean marcaAbajoN, boolean marcaIzquierdaN, boolean marcaDerechaN, boolean cuadroCerradoN){
+        this.marcaArriba = marcaArribaN;
+        this.marcaAbajo = marcaAbajoN;
+        this.marcaIzquierda = marcaIzquierdaN;
+        this.marcaDerecha = marcaDerechaN;
+        this.cuadroCerrado = cuadroCerradoN;
     }
 
     /**
      * Gets y sets de la clase Tablero.
      * @return 
      */
-    public double getDimension() {
-        return dimension;
+    public int getAlturaTablero() {
+        return alturaTablero;
     }
 
-    public void setDimension(double dimension) {
-        this.dimension = dimension;
+    public void setAlturaTablero(int alturaTablero) {
+        this.alturaTablero = alturaTablero;
     }
 
-    public double getAncho() {
-        return ancho;
+    public int getAnchuraTablero() {
+        return anchuraTablero;
     }
 
-    public void setAncho(double ancho) {
-        this.ancho = ancho;
+    public void setAnchuraTablero(int anchuraTablero) {
+        this.anchuraTablero = anchuraTablero;
     }
 
-    public double getLargo() {
-        return largo;
+    public boolean isMarcaArriba() {
+        return marcaArriba;
     }
 
-    public void setLargo(double largo) {
-        this.largo = largo;
+    public void setMarcaArriba(boolean marcaArriba) {
+        this.marcaArriba = marcaArriba;
     }
 
-    public Cuadro getCuadro() {
-        return cuadro;
+    public boolean isMarcaAbajo() {
+        return marcaAbajo;
     }
 
-    public void setCuadro(Cuadro cuadro) {
-        this.cuadro = cuadro;
+    public void setMarcaAbajo(boolean marcaAbajo) {
+        this.marcaAbajo = marcaAbajo;
     }
 
+    public boolean isMarcaIzquierda() {
+        return marcaIzquierda;
+    }
+
+    public void setMarcaIzquierda(boolean marcaIzquierda) {
+        this.marcaIzquierda = marcaIzquierda;
+    }
+
+    public boolean isMarcaDerecha() {
+        return marcaDerecha;
+    }
+
+    public void setMarcaDerecha(boolean marcaDerecha) {
+        this.marcaDerecha = marcaDerecha;
+    }
+
+    public boolean isCuadroCerrado() {
+        return cuadroCerrado;
+    }
+
+    public void setCuadroCerrado(boolean cuadroCerrado) {
+        this.cuadroCerrado = cuadroCerrado;
+    }
+
+    
     @Override
     public String toString() {
-        return "Tablero{" + "dimension=" + dimension + ", ancho=" + ancho + ", largo=" + largo + '}';
+        return "Tablero{" + "alturaTablero=" + alturaTablero + ", anchuraTablero=" + anchuraTablero + ", marcaArriba=" + marcaArriba + ", marcaAbajo=" + marcaAbajo + ", marcaIzquierda=" + marcaIzquierda + ", marcaDerecha=" + marcaDerecha + ", cuadroCerrado=" + cuadroCerrado + '}';
     }
     
 }
