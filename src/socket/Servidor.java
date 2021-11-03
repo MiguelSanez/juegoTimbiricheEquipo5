@@ -21,7 +21,7 @@ public class Servidor {
     /**
      * @param args the command line arguments
      */
-    public void main(String[] args) {
+    public static void main(String[] args) {
         
         Socket socket = null;
         ServerSocket ss2 = null;
@@ -50,7 +50,7 @@ public class Servidor {
     }
     
     
-    class ServerThread extends Thread {
+    public static class ServerThread extends Thread {
 
     String line = null;
     BufferedReader is = null;
