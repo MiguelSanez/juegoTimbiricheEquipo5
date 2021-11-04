@@ -5,6 +5,8 @@
  */
 package juegotimbiriche;
 
+import javax.swing.JDialog;
+
 /**
  *
  * @author Equipo 5
@@ -15,10 +17,10 @@ public class Juego {
      * Atributos de la clase Juego.
      */
     private int numJugadores;
-    private Jugador jugador;
-    private int puntajes;
+    private Jugador[] jugadores;
     private String status;
     private Tablero tablero;
+    private JDialog juego;
 
     /***
      * Constructor por defecto.
@@ -27,17 +29,15 @@ public class Juego {
     }
 
     
-    public Juego(Jugador jugador, int puntajes, String status) {
-        this.jugador = jugador;
-        this.puntajes = puntajes;
+    public Juego(Jugador[] jugadores, int puntajes, String status) {
+        this.jugadores = jugadores;
         this.status = status;
     }
 
     
-    public Juego(int numJugadores, Jugador jugador, int puntajes, String status, Tablero tablero) {
+    public Juego(int numJugadores, Jugador[] jugadores, int puntajes, String status, Tablero tablero) {
         this.numJugadores = numJugadores;
-        this.jugador = jugador;
-        this.puntajes = puntajes;
+        this.jugadores = new Jugador[numJugadores];
         this.status = status;
         this.tablero = tablero;
     }
@@ -54,20 +54,12 @@ public class Juego {
         this.numJugadores = numJugadores;
     }
 
-    public Jugador getJugador() {
-        return jugador;
+    public Jugador[] getJugadores() {
+        return jugadores;
     }
 
-    public void setJugador(Jugador jugador) {
-        this.jugador = jugador;
-    }
-
-    public int getPuntajes() {
-        return puntajes;
-    }
-
-    public void setPuntajes(int puntajes) {
-        this.puntajes = puntajes;
+    public void setJugador(Jugador[] jugadores) {
+        this.jugadores = jugadores;
     }
 
     public String getStatus() {
@@ -86,9 +78,17 @@ public class Juego {
         this.tablero = tablero;
     }
 
+    public JDialog getJuego() {
+        return juego;
+    }
+
+    public void setJuego(JDialog juego) {
+        this.juego = juego;
+    }
+
     @Override
     public String toString() {
-        return "Juego{" + "jugador=" + jugador + ", puntajes=" + puntajes + ", status=" + status + '}';
+        return "Juego{" + "jugador=" + jugadores + ", status=" + status + '}';
     }
     
 }

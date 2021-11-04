@@ -11,9 +11,10 @@ public class Jugador extends Juego{
      * Atributos de la clase Jugador.
      */
     private int[] color;
-    private int puntaje;
+    private int puntaje=0;
     private String nombre;
     private Boolean turno;
+    private int numTurno;
 
     /**
      * Constructor por default de la clase Jugador.
@@ -59,6 +60,18 @@ public class Jugador extends Juego{
 
     public void setTurno(Boolean turno) {
         this.turno = turno;
+    }
+
+    public int getNumTurno() {
+        return numTurno;
+    }
+
+    public void setNumTurno(int numTurno) {
+        this.numTurno = numTurno;
+    }
+    
+    public void sumarPuntaje(){
+        this.puntaje++;
     }
 
     @Override

@@ -17,7 +17,7 @@ public class Tablero extends Juego{
     private double dimension;
     private double ancho;
     private double largo;
-    private Cuadro cuadro;
+    private Figura cuadro;
 
     /**
      * Constructor por default de la clase Tablero.
@@ -25,7 +25,7 @@ public class Tablero extends Juego{
     public Tablero() {
     }
 
-    public Tablero(double dimension, double ancho, double largo, Cuadro cuadro) {
+    public Tablero(double dimension, double ancho, double largo, Figura cuadro) {
         this.dimension = dimension;
         this.ancho = ancho;
         this.largo = largo;
@@ -60,11 +60,11 @@ public class Tablero extends Juego{
         this.largo = largo;
     }
 
-    public Cuadro getCuadro() {
+    public Figura getCuadro() {
         return cuadro;
     }
 
-    public void setCuadro(Cuadro cuadro) {
+    public void setCuadro(Figura cuadro) {
         this.cuadro = cuadro;
     }
 

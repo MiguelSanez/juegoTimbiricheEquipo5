@@ -1,6 +1,10 @@
 
 package presentacion;
 
+import control.ControlTablero;
+import java.awt.Color;
+import javax.swing.SwingConstants;
+import juegotimbiriche.Figura;
 import juegotimbiriche.Jugador;
 
 /**
@@ -9,14 +13,26 @@ import juegotimbiriche.Jugador;
  */
 public class Tablero extends javax.swing.JDialog {
     private juegoTimbiriche juego;
-    private Jugador jugador;
+    private Jugador[] jugadores;
+    private Jugador jugadorTurno;
+    private int turno;
+    private int cantJugadores=0;
+    private ControlTablero controlTablero;
+    private Figura[][] figuras;
     
-    public Tablero(java.awt.Frame parent, boolean modal, juegoTimbiriche juego, Jugador jugador) {
+    public Tablero(java.awt.Frame parent, boolean modal, juegoTimbiriche juego, Jugador[] jugadores) {
         super(parent, modal);
         this.juego= juego;
-        this.jugador=jugador;
+        this.turno=1;
+        this.jugadores=jugadores;
+        controlTablero= new ControlTablero();
+        figuras= new Figura[19][19];
+        verificarCantidadJugadores(jugadores);
         initComponents();
         setLocationRelativeTo(null);
+        jugadores[0].setTurno(true);
+        imprimirBotones();
+        mostrarJugadores();
     }
 
     /**
@@ -28,86 +44,148 @@ public class Tablero extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel5 = new javax.swing.JPanel();
-        jugador4 = new javax.swing.JPanel();
-        jugador3 = new javax.swing.JPanel();
-        jugador1 = new javax.swing.JPanel();
-        jugador2 = new javax.swing.JPanel();
+        divisor = new javax.swing.JPanel();
+        tablero = new javax.swing.JPanel();
+        fondoJugador4 = new javax.swing.JPanel();
+        nombreJugador4 = new javax.swing.JLabel();
+        fondoJugador3 = new javax.swing.JPanel();
+        nombreJugador3 = new javax.swing.JLabel();
+        fondoJugador1 = new javax.swing.JPanel();
+        nombreJugador1 = new javax.swing.JLabel();
+        fondoJugador2 = new javax.swing.JPanel();
+        nombreJugador2 = new javax.swing.JLabel();
         btnSalir = new javax.swing.JButton();
         fondoSalir = new javax.swing.JPanel();
+        lblPuntaje1 = new javax.swing.JLabel();
+        puntajeJugador1 = new javax.swing.JLabel();
+        lblPuntaje2 = new javax.swing.JLabel();
+        puntajeJugador2 = new javax.swing.JLabel();
+        lblPuntaje3 = new javax.swing.JLabel();
+        puntajeJugador3 = new javax.swing.JLabel();
+        lblPuntaje4 = new javax.swing.JLabel();
+        puntajeJugador4 = new javax.swing.JLabel();
+        lblTurno = new javax.swing.JLabel();
+        nombreTurno = new javax.swing.JLabel();
         fondo = new javax.swing.JLabel();
-        jMenuBar1 = new javax.swing.JMenuBar();
+        menu = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 520, Short.MAX_VALUE)
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 271, Short.MAX_VALUE)
-        );
+        divisor.setBackground(new java.awt.Color(255, 255, 255));
 
-        getContentPane().add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 90, 520, 270));
-
-        javax.swing.GroupLayout jugador4Layout = new javax.swing.GroupLayout(jugador4);
-        jugador4.setLayout(jugador4Layout);
-        jugador4Layout.setHorizontalGroup(
-            jugador4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 120, Short.MAX_VALUE)
+        javax.swing.GroupLayout tableroLayout = new javax.swing.GroupLayout(tablero);
+        tablero.setLayout(tableroLayout);
+        tableroLayout.setHorizontalGroup(
+            tableroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 267, Short.MAX_VALUE)
         );
-        jugador4Layout.setVerticalGroup(
-            jugador4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 70, Short.MAX_VALUE)
+        tableroLayout.setVerticalGroup(
+            tableroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 248, Short.MAX_VALUE)
         );
 
-        getContentPane().add(jugador4, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 360, 120, 70));
-
-        javax.swing.GroupLayout jugador3Layout = new javax.swing.GroupLayout(jugador3);
-        jugador3.setLayout(jugador3Layout);
-        jugador3Layout.setHorizontalGroup(
-            jugador3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 120, Short.MAX_VALUE)
+        javax.swing.GroupLayout divisorLayout = new javax.swing.GroupLayout(divisor);
+        divisor.setLayout(divisorLayout);
+        divisorLayout.setHorizontalGroup(
+            divisorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(divisorLayout.createSequentialGroup()
+                .addGap(128, 128, 128)
+                .addComponent(tablero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(125, Short.MAX_VALUE))
         );
-        jugador3Layout.setVerticalGroup(
-            jugador3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 70, Short.MAX_VALUE)
-        );
-
-        getContentPane().add(jugador3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 360, 120, 70));
-
-        jugador1.setPreferredSize(new java.awt.Dimension(125, 80));
-
-        javax.swing.GroupLayout jugador1Layout = new javax.swing.GroupLayout(jugador1);
-        jugador1.setLayout(jugador1Layout);
-        jugador1Layout.setHorizontalGroup(
-            jugador1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 120, Short.MAX_VALUE)
-        );
-        jugador1Layout.setVerticalGroup(
-            jugador1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 70, Short.MAX_VALUE)
+        divisorLayout.setVerticalGroup(
+            divisorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(divisorLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(tablero, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
-        getContentPane().add(jugador1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 120, 70));
+        getContentPane().add(divisor, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 90, 520, 270));
 
-        javax.swing.GroupLayout jugador2Layout = new javax.swing.GroupLayout(jugador2);
-        jugador2.setLayout(jugador2Layout);
-        jugador2Layout.setHorizontalGroup(
-            jugador2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 120, Short.MAX_VALUE)
+        nombreJugador4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        nombreJugador4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        nombreJugador4.setText("Vacío");
+
+        javax.swing.GroupLayout fondoJugador4Layout = new javax.swing.GroupLayout(fondoJugador4);
+        fondoJugador4.setLayout(fondoJugador4Layout);
+        fondoJugador4Layout.setHorizontalGroup(
+            fondoJugador4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(nombreJugador4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
         );
-        jugador2Layout.setVerticalGroup(
-            jugador2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 70, Short.MAX_VALUE)
+        fondoJugador4Layout.setVerticalGroup(
+            fondoJugador4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, fondoJugador4Layout.createSequentialGroup()
+                .addContainerGap(26, Short.MAX_VALUE)
+                .addComponent(nombreJugador4)
+                .addGap(27, 27, 27))
         );
 
-        getContentPane().add(jugador2, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 20, 120, 70));
+        getContentPane().add(fondoJugador4, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 360, 120, 70));
+
+        nombreJugador3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        nombreJugador3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        nombreJugador3.setText("Vacío");
+
+        javax.swing.GroupLayout fondoJugador3Layout = new javax.swing.GroupLayout(fondoJugador3);
+        fondoJugador3.setLayout(fondoJugador3Layout);
+        fondoJugador3Layout.setHorizontalGroup(
+            fondoJugador3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(nombreJugador3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+        );
+        fondoJugador3Layout.setVerticalGroup(
+            fondoJugador3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, fondoJugador3Layout.createSequentialGroup()
+                .addContainerGap(26, Short.MAX_VALUE)
+                .addComponent(nombreJugador3)
+                .addGap(27, 27, 27))
+        );
+
+        getContentPane().add(fondoJugador3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 360, 120, 70));
+
+        fondoJugador1.setPreferredSize(new java.awt.Dimension(125, 80));
+
+        nombreJugador1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        nombreJugador1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        nombreJugador1.setText("Vacío");
+
+        javax.swing.GroupLayout fondoJugador1Layout = new javax.swing.GroupLayout(fondoJugador1);
+        fondoJugador1.setLayout(fondoJugador1Layout);
+        fondoJugador1Layout.setHorizontalGroup(
+            fondoJugador1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(nombreJugador1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+        );
+        fondoJugador1Layout.setVerticalGroup(
+            fondoJugador1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, fondoJugador1Layout.createSequentialGroup()
+                .addContainerGap(26, Short.MAX_VALUE)
+                .addComponent(nombreJugador1)
+                .addGap(27, 27, 27))
+        );
+
+        getContentPane().add(fondoJugador1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 120, 70));
+
+        nombreJugador2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        nombreJugador2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        nombreJugador2.setText("Vacío");
+
+        javax.swing.GroupLayout fondoJugador2Layout = new javax.swing.GroupLayout(fondoJugador2);
+        fondoJugador2.setLayout(fondoJugador2Layout);
+        fondoJugador2Layout.setHorizontalGroup(
+            fondoJugador2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(nombreJugador2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+        );
+        fondoJugador2Layout.setVerticalGroup(
+            fondoJugador2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, fondoJugador2Layout.createSequentialGroup()
+                .addContainerGap(26, Short.MAX_VALUE)
+                .addComponent(nombreJugador2)
+                .addGap(27, 27, 27))
+        );
+
+        getContentPane().add(fondoJugador2, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 20, 120, 70));
 
         btnSalir.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnSalir.setText("Salir");
@@ -123,38 +201,140 @@ public class Tablero extends javax.swing.JDialog {
         fondoSalir.setBackground(new java.awt.Color(255, 87, 87));
         getContentPane().add(fondoSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 380, 130, 40));
 
+        lblPuntaje1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblPuntaje1.setText("Puntaje: ");
+        getContentPane().add(lblPuntaje1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, -1, -1));
+
+        puntajeJugador1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        puntajeJugador1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        puntajeJugador1.setText("0");
+        getContentPane().add(puntajeJugador1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 100, 40, 20));
+
+        lblPuntaje2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblPuntaje2.setText("Puntaje: ");
+        getContentPane().add(lblPuntaje2, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 100, -1, -1));
+
+        puntajeJugador2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        puntajeJugador2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        puntajeJugador2.setText("0");
+        getContentPane().add(puntajeJugador2, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 100, 40, 20));
+
+        lblPuntaje3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblPuntaje3.setText("Puntaje: ");
+        getContentPane().add(lblPuntaje3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 330, -1, -1));
+
+        puntajeJugador3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        puntajeJugador3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        puntajeJugador3.setText("0");
+        getContentPane().add(puntajeJugador3, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 330, 40, 20));
+
+        lblPuntaje4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblPuntaje4.setText("Puntaje: ");
+        getContentPane().add(lblPuntaje4, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 330, -1, -1));
+
+        puntajeJugador4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        puntajeJugador4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        puntajeJugador4.setText("0");
+        getContentPane().add(puntajeJugador4, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 330, 40, 20));
+
+        lblTurno.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblTurno.setText("Turno de: ");
+        getContentPane().add(lblTurno, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 60, -1, -1));
+
+        nombreTurno.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        nombreTurno.setText("Nombre jugador");
+        getContentPane().add(nombreTurno, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 60, 120, -1));
+
         fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Tablero.png"))); // NOI18N
+        fondo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                fondoKeyTyped(evt);
+            }
+        });
         getContentPane().add(fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         jMenu2.setText("Ayuda");
-        jMenuBar1.add(jMenu2);
+        menu.add(jMenu2);
 
-        setJMenuBar(jMenuBar1);
+        setJMenuBar(menu);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         
-        MenuJuego partida = new MenuJuego((java.awt.Frame) this.getParent(), true, this.juego, this.jugador);
+        MenuJuego partida = new MenuJuego((java.awt.Frame) this.getParent(), true, this.juego, this.jugadores[0]);
         this.dispose();
         partida.setVisible(true);
         partida.setLocationRelativeTo(this);
         
     }//GEN-LAST:event_btnSalirActionPerformed
 
-    
+    private void fondoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_fondoKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_fondoKeyTyped
 
+    public void imprimirBotones(){
+        controlTablero.acomodar(figuras, true);
+    }
+    
+    public void mostrarJugadores(){
+        for (int i = 0; i < cantJugadores; i++) {
+            switch(i){
+                case 0:
+                    fondoJugador1.setBackground(new Color(jugadores[0].getColor()[0], jugadores[0].getColor()[1], jugadores[0].getColor()[2]));
+                    nombreJugador1.setText(jugadores[0].getNombre());
+                    break;
+                case 1:
+                    fondoJugador2.setBackground(new Color(jugadores[1].getColor()[0], jugadores[1].getColor()[1], jugadores[1].getColor()[2]));
+                    nombreJugador2.setText(jugadores[1].getNombre());
+                    break;
+                case 2:
+                    fondoJugador3.setBackground(new Color(jugadores[2].getColor()[0], jugadores[2].getColor()[1], jugadores[2].getColor()[2]));
+                    nombreJugador3.setText(jugadores[2].getNombre());
+                    break;
+                case 3:
+                    fondoJugador4.setBackground(new Color(jugadores[3].getColor()[0], jugadores[3].getColor()[1], jugadores[3].getColor()[2]));
+                    nombreJugador4.setText(jugadores[3].getNombre());
+                    break;
+            }
+        }
+    }
+
+    public void verificarCantidadJugadores(Jugador[] jugadores){
+        for (int i =0; i<4; i++) {
+            if(jugadores[i]!=null){
+                cantJugadores++;
+                jugadores[i].setNumTurno(i+1);
+            }
+        }
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSalir;
+    private javax.swing.JPanel divisor;
     private javax.swing.JLabel fondo;
+    private javax.swing.JPanel fondoJugador1;
+    private javax.swing.JPanel fondoJugador2;
+    private javax.swing.JPanel fondoJugador3;
+    private javax.swing.JPanel fondoJugador4;
     private javax.swing.JPanel fondoSalir;
     private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jugador1;
-    private javax.swing.JPanel jugador2;
-    private javax.swing.JPanel jugador3;
-    private javax.swing.JPanel jugador4;
+    private javax.swing.JLabel lblPuntaje1;
+    private javax.swing.JLabel lblPuntaje2;
+    private javax.swing.JLabel lblPuntaje3;
+    private javax.swing.JLabel lblPuntaje4;
+    private javax.swing.JLabel lblTurno;
+    private javax.swing.JMenuBar menu;
+    private javax.swing.JLabel nombreJugador1;
+    private javax.swing.JLabel nombreJugador2;
+    private javax.swing.JLabel nombreJugador3;
+    private javax.swing.JLabel nombreJugador4;
+    private javax.swing.JLabel nombreTurno;
+    private javax.swing.JLabel puntajeJugador1;
+    private javax.swing.JLabel puntajeJugador2;
+    private javax.swing.JLabel puntajeJugador3;
+    private javax.swing.JLabel puntajeJugador4;
+    private javax.swing.JPanel tablero;
     // End of variables declaration//GEN-END:variables
 }

@@ -3,11 +3,17 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/lossa/Downloads/juegoTimbiriche%20(1)/juegoTimbiriche/src/presentacion/IngresarNombre.java</file>
             <file>file:/C:/Users/lossa/Downloads/juegoTimbiriche%20(1)/juegoTimbiriche/src/presentacion/CrearPartida.java</file>
             <file>file:/C:/Users/lossa/Downloads/juegoTimbiriche%20(1)/juegoTimbiriche/src/presentacion/juegoTimbiriche.java</file>
             <file>file:/C:/Users/lossa/Downloads/juegoTimbiriche%20(1)/juegoTimbiriche/src/juegotimbiriche/Jugador.java</file>
+            <file>file:/C:/Users/lossa/Downloads/juegoTimbiriche%20(1)/juegoTimbiriche/src/juegotimbiriche/TipoFigura.java</file>
+            <file>file:/C:/Users/lossa/Downloads/juegoTimbiriche%20(1)/juegoTimbiriche/src/juegotimbiriche/Tablero.java</file>
+            <file>file:/C:/Users/lossa/Downloads/juegoTimbiriche%20(1)/juegoTimbiriche/src/presentacion/IngresarNombre.java</file>
             <file>file:/C:/Users/lossa/Downloads/juegoTimbiriche%20(1)/juegoTimbiriche/src/presentacion/MenuJuego.java</file>
+            <file>file:/C:/Users/lossa/Downloads/juegoTimbiriche%20(1)/juegoTimbiriche/src/control/Conexion.java</file>
+            <file>file:/C:/Users/lossa/Downloads/juegoTimbiriche%20(1)/juegoTimbiriche/src/control/ControlTablero.java</file>
+            <file>file:/C:/Users/lossa/Downloads/juegoTimbiriche%20(1)/juegoTimbiriche/src/juegotimbiriche/Figura.java</file>
+            <file>file:/C:/Users/lossa/Downloads/juegoTimbiriche%20(1)/juegoTimbiriche/src/juegotimbiriche/Juego.java</file>
             <file>file:/C:/Users/lossa/Downloads/juegoTimbiriche%20(1)/juegoTimbiriche/src/presentacion/SalaDeEspera.java</file>
             <file>file:/C:/Users/lossa/Downloads/juegoTimbiriche%20(1)/juegoTimbiriche/src/presentacion/Tablero.java</file>
             <file>file:/C:/Users/lossa/Downloads/juegoTimbiriche%20(1)/juegoTimbiriche/src/control/Control.java</file>

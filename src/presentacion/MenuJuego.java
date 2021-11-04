@@ -10,11 +10,13 @@ import juegotimbiriche.Jugador;
 public class MenuJuego extends javax.swing.JDialog {
     private juegoTimbiriche juego;
     private Jugador jugador;
+    private boolean salir;
     
     public MenuJuego(java.awt.Frame parent, boolean modal, juegoTimbiriche juego, Jugador jugador) {
         super(parent, modal);
         this.juego= juego;
         this.jugador=jugador;
+        this.salir=true;
         initComponents();
         setLocationRelativeTo(null);
     }
@@ -39,6 +41,11 @@ public class MenuJuego extends javax.swing.JDialog {
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         btnCrearPartida.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -100,9 +107,9 @@ public class MenuJuego extends javax.swing.JDialog {
 
     //Boton ingresar partida
     private void btnIngresarPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarPartidaActionPerformed
-
-        IngresarPartida partida = new IngresarPartida((java.awt.Frame) this.getParent(), true, this.juego, this.jugador);
+        salir=false;
         this.dispose();
+        IngresarPartida partida = new IngresarPartida((java.awt.Frame) this.getParent(), true, this.juego, this.jugador);
         partida.setVisible(true);
         partida.setLocationRelativeTo(this);
 
@@ -110,13 +117,19 @@ public class MenuJuego extends javax.swing.JDialog {
 
     //Boton crear partida
     private void btnCrearPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearPartidaActionPerformed
-
-        CrearPartida partida = new CrearPartida((java.awt.Frame) this.getParent(), true, this.juego, this.jugador);
+        salir=false;
         this.dispose();
+        CrearPartida partida = new CrearPartida((java.awt.Frame) this.getParent(), true, this.juego, this.jugador);
         partida.setVisible(true);
         partida.setLocationRelativeTo(this);
 
     }//GEN-LAST:event_btnCrearPartidaActionPerformed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        this.dispose();
+        if(salir)
+            this.juego.dispose();
+    }//GEN-LAST:event_formWindowClosed
 
     
 

@@ -21,6 +21,7 @@ public class juegoTimbiriche extends javax.swing.JFrame {
     public juegoTimbiriche() {
         initComponents();
         setLocationRelativeTo(null);
+        setDefaultCloseOperation(this.EXIT_ON_CLOSE);
     }
 
     /**
@@ -101,8 +102,8 @@ public class juegoTimbiriche extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSalirActionPerformed
 
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
+        this.dispose();
         IngresarNombre nombre = new IngresarNombre(this, true, this);
-        this.setVisible(false);
         nombre.setVisible(true);
         nombre.setLocationRelativeTo(this);
 
