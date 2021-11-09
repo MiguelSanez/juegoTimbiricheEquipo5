@@ -3,7 +3,7 @@ package presentacion;
 
 import control.ControlTablero;
 import java.awt.Color;
-import juegotimbiriche.Figura;
+import javax.swing.JLabel;
 import juegotimbiriche.Juego;
 import juegotimbiriche.Jugador;
 
@@ -24,7 +24,8 @@ public class DlgTablero extends javax.swing.JDialog {
         this.turno=1;
         initComponents();
         this.partida=partida;
-        this.controlTablero= new ControlTablero(tablero, partida);
+        JLabel[] puntuaciones= {puntajeJugador1,puntajeJugador2,puntajeJugador3,puntajeJugador4};
+        this.controlTablero= new ControlTablero(tablero, partida, puntuaciones, this, juego);
         setLocationRelativeTo(null);
         imprimirBotones();
         mostrarJugadores();

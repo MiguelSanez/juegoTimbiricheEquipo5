@@ -52,7 +52,6 @@ public class Juego {
      * @return 
      */
     public int getNumJugadores() {
-        System.out.println(numJugadores);
         return numJugadores;
     }
 

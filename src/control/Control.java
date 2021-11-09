@@ -2,10 +2,13 @@
 package control;
 
 import javax.swing.BorderFactory;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import juegotimbiriche.Figura;
 import juegotimbiriche.Juego;
 import juegotimbiriche.Jugador;
+import presentacion.SalaDeEspera;
+import presentacion.juegoTimbiriche;
 
 public class Control {
 
@@ -97,10 +100,20 @@ public class Control {
     }
     
     public Juego cambiarTurno(Juego partida, Jugador jugador){
-        for(Jugador j : partida.getJugadores()){
-            j.setTurno(partida.getTurnoActual() % partida.getNumJugadores() == 0);
+        int idx = 0;
+        int turnoIdx = partida.getTurnoActual();
+        System.out.println("Actual turn " + turnoIdx);
+        if(!jugador.getTurno()){
+            for(Jugador j : partida.getJugadores()){
+                boolean turno = turnoIdx % partida.getNumJugadores() == idx++;
+                j.setTurno(turno);
+                if (turno){
+                    System.out.println("Turn given to " + j.getNombre() + " idx " + idx);
+                    break;
+                }
+            }
+            partida.nuevoTurno();
         }
-        partida.nuevoTurno();
         return partida;
     }
     
@@ -111,5 +124,18 @@ public class Control {
             }
         }
         return false;
+    }
+    
+    public void finalizarPartida(Juego partida, juegoTimbiriche juego){
+        Jugador ganador= partida.getJugadores()[0];
+        for (int i = 1; i < partida.getNumJugadores(); i++) {
+            if(partida.getJugadores()[i].getPuntaje()>ganador.getPuntaje()){
+                ganador= partida.getJugadores()[i];
+            }
+        }
+        JOptionPane.showMessageDialog(null, "El ganador es "+ganador.getNombre(), "Juego finalizado", JOptionPane.INFORMATION_MESSAGE);
+        partida.getJuego().dispose();
+        SalaDeEspera sala = new SalaDeEspera((java.awt.Frame) juego.getParent(), true, juego, partida.getJugadores());
+        sala.setVisible(true);
     }
 }

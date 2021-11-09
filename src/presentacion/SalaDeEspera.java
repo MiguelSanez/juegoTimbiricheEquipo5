@@ -30,6 +30,19 @@ public class SalaDeEspera extends javax.swing.JDialog {
         SimuladorThread t= new SimuladorThread(this,control);
         t.start();
     }
+    
+    public SalaDeEspera(java.awt.Frame parent, boolean modal, juegoTimbiriche juego, Jugador[] jugadores){
+        super(parent, modal);
+        this.juego= juego;
+        initComponents();
+        this.partida= new Juego(new Tablero("10x10"));
+        this.partida.getJugadores()[0]=jugadores[0];
+        this.partida.getJugadores()[1]=jugadores[1];
+        this.partida.getJugadores()[2]=jugadores[2];
+        this.partida.getJugadores()[3]=jugadores[3];
+        setLocationRelativeTo(null);
+        mostrarJugadores();
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -207,6 +220,20 @@ public class SalaDeEspera extends javax.swing.JDialog {
         
     }//GEN-LAST:event_btnCancelarActionPerformed
 
+    public void mostrarJugadores(){
+        fondoJugador1.setBackground(new Color(partida.getJugadores()[0].getColor()[0], partida.getJugadores()[0].getColor()[1], partida.getJugadores()[0].getColor()[2]));
+        nombreJugador1.setText(partida.getJugadores()[0].getNombre());
+        
+        fondoJugador2.setBackground(new Color(partida.getJugadores()[1].getColor()[0], partida.getJugadores()[1].getColor()[1], partida.getJugadores()[1].getColor()[2]));
+        nombreJugador2.setText(partida.getJugadores()[1].getNombre());
+
+        fondoJugador3.setBackground(new Color(partida.getJugadores()[2].getColor()[0], partida.getJugadores()[2].getColor()[1], partida.getJugadores()[2].getColor()[2]));
+        nombreJugador3.setText(partida.getJugadores()[2].getNombre());
+
+        fondoJugador4.setBackground(new Color(partida.getJugadores()[3].getColor()[0], partida.getJugadores()[3].getColor()[1], partida.getJugadores()[3].getColor()[2]));
+        nombreJugador4.setText(partida.getJugadores()[3].getNombre());
+    }
+    
     public void mostrarJugadores(int numero){
         switch(numero){
             case 2: 
