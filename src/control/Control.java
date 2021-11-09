@@ -1,14 +1,10 @@
 
 package control;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Graphics;
-import java.awt.Insets;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
-import javax.swing.border.Border;
 import juegotimbiriche.Figura;
+import juegotimbiriche.Juego;
 import juegotimbiriche.Jugador;
 
 public class Control {
@@ -93,8 +89,6 @@ public class Control {
         return jugador;
     }
     
-<<<<<<< Updated upstream
-=======
     public void agregarBotones(Figura figura, JPanel panel){
         figura.setOpaque(true);
         figura.setBorder(BorderFactory.createEmptyBorder(1,1,1,1));
@@ -102,5 +96,20 @@ public class Control {
         figura.setVisible(true);
     }
     
->>>>>>> Stashed changes
+    public Juego cambiarTurno(Juego partida, Jugador jugador){
+        for(Jugador j : partida.getJugadores()){
+            j.setTurno(partida.getTurnoActual() % partida.getNumJugadores() == 0);
+        }
+        partida.nuevoTurno();
+        return partida;
+    }
+    
+    public boolean checarTurnos(Juego partida){
+        for (int i = 0; i < partida.getNumJugadores(); i++) {
+            if (partida.getJugadores()[i].getTurno()) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

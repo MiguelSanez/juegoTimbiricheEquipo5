@@ -21,6 +21,7 @@ public class Juego {
     private String status;
     private Tablero tablero;
     private JDialog juego;
+    private int turnoActual=0;
 
     /***
      * Constructor por defecto.
@@ -28,6 +29,10 @@ public class Juego {
     public Juego() {
     }
 
+    public Juego(Tablero tablero){
+        this.tablero=tablero;
+        this.jugadores= new Jugador[4];
+    }
     
     public Juego(Jugador[] jugadores, int puntajes, String status) {
         this.jugadores = jugadores;
@@ -47,6 +52,7 @@ public class Juego {
      * @return 
      */
     public int getNumJugadores() {
+        System.out.println(numJugadores);
         return numJugadores;
     }
 
@@ -86,6 +92,15 @@ public class Juego {
         this.juego = juego;
     }
 
+    public int nuevoTurno(){
+        turnoActual++;
+        return turnoActual;
+    }
+
+    public int getTurnoActual() {
+        return turnoActual;
+    }
+    
     @Override
     public String toString() {
         return "Juego{" + "jugador=" + jugadores + ", status=" + status + '}';

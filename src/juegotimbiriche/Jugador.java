@@ -13,7 +13,7 @@ public class Jugador extends Juego{
     private int[] color;
     private int puntaje=0;
     private String nombre;
-    private Boolean turno;
+    private Boolean turno= false;
     private int numTurno;
 
     /**

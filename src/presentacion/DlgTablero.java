@@ -3,36 +3,33 @@ package presentacion;
 
 import control.ControlTablero;
 import java.awt.Color;
-import javax.swing.SwingConstants;
 import juegotimbiriche.Figura;
+import juegotimbiriche.Juego;
 import juegotimbiriche.Jugador;
 
 /**
  *
  * @author Equipo 5
  */
-public class Tablero extends javax.swing.JDialog {
+public class DlgTablero extends javax.swing.JDialog {
     private juegoTimbiriche juego;
-    private Jugador[] jugadores;
     private Jugador jugadorTurno;
     private int turno;
-    private int cantJugadores=0;
     private ControlTablero controlTablero;
-    private Figura[][] figuras;
+    private Juego partida;
     
-    public Tablero(java.awt.Frame parent, boolean modal, juegoTimbiriche juego, Jugador[] jugadores) {
+    public DlgTablero(java.awt.Frame parent, boolean modal, juegoTimbiriche juego, Juego partida) {
         super(parent, modal);
         this.juego= juego;
         this.turno=1;
-        this.jugadores=jugadores;
-        controlTablero= new ControlTablero();
-        figuras= new Figura[19][19];
-        verificarCantidadJugadores(jugadores);
         initComponents();
+        this.partida=partida;
+        this.controlTablero= new ControlTablero(tablero, partida);
         setLocationRelativeTo(null);
-        jugadores[0].setTurno(true);
         imprimirBotones();
         mostrarJugadores();
+        partida.getJugadores()[0].setTurno(true);
+        partida.nuevoTurno();
     }
 
     /**
@@ -263,7 +260,7 @@ public class Tablero extends javax.swing.JDialog {
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         
-        MenuJuego partida = new MenuJuego((java.awt.Frame) this.getParent(), true, this.juego, this.jugadores[0]);
+        MenuJuego partida = new MenuJuego((java.awt.Frame) this.getParent(), true, this.juego, this.partida.getJugadores()[0]);
         this.dispose();
         partida.setVisible(true);
         partida.setLocationRelativeTo(this);
@@ -275,37 +272,28 @@ public class Tablero extends javax.swing.JDialog {
     }//GEN-LAST:event_fondoKeyTyped
 
     public void imprimirBotones(){
-        controlTablero.acomodar(figuras, true);
+        controlTablero.acomodar(partida.getTablero().getFiguras(), true);
     }
     
     public void mostrarJugadores(){
-        for (int i = 0; i < cantJugadores; i++) {
+        for (int i = 0; i < partida.getNumJugadores(); i++) {
             switch(i){
                 case 0:
-                    fondoJugador1.setBackground(new Color(jugadores[0].getColor()[0], jugadores[0].getColor()[1], jugadores[0].getColor()[2]));
-                    nombreJugador1.setText(jugadores[0].getNombre());
+                    fondoJugador1.setBackground(new Color(partida.getJugadores()[0].getColor()[0], partida.getJugadores()[0].getColor()[1], partida.getJugadores()[0].getColor()[2]));
+                    nombreJugador1.setText(partida.getJugadores()[0].getNombre());
                     break;
                 case 1:
-                    fondoJugador2.setBackground(new Color(jugadores[1].getColor()[0], jugadores[1].getColor()[1], jugadores[1].getColor()[2]));
-                    nombreJugador2.setText(jugadores[1].getNombre());
+                    fondoJugador2.setBackground(new Color(partida.getJugadores()[1].getColor()[0], partida.getJugadores()[1].getColor()[1], partida.getJugadores()[1].getColor()[2]));
+                    nombreJugador2.setText(partida.getJugadores()[1].getNombre());
                     break;
                 case 2:
-                    fondoJugador3.setBackground(new Color(jugadores[2].getColor()[0], jugadores[2].getColor()[1], jugadores[2].getColor()[2]));
-                    nombreJugador3.setText(jugadores[2].getNombre());
+                    fondoJugador3.setBackground(new Color(partida.getJugadores()[2].getColor()[0], partida.getJugadores()[2].getColor()[1], partida.getJugadores()[2].getColor()[2]));
+                    nombreJugador3.setText(partida.getJugadores()[2].getNombre());
                     break;
                 case 3:
-                    fondoJugador4.setBackground(new Color(jugadores[3].getColor()[0], jugadores[3].getColor()[1], jugadores[3].getColor()[2]));
-                    nombreJugador4.setText(jugadores[3].getNombre());
+                    fondoJugador4.setBackground(new Color(partida.getJugadores()[3].getColor()[0], partida.getJugadores()[3].getColor()[1], partida.getJugadores()[3].getColor()[2]));
+                    nombreJugador4.setText(partida.getJugadores()[3].getNombre());
                     break;
-            }
-        }
-    }
-
-    public void verificarCantidadJugadores(Jugador[] jugadores){
-        for (int i =0; i<4; i++) {
-            if(jugadores[i]!=null){
-                cantJugadores++;
-                jugadores[i].setNumTurno(i+1);
             }
         }
     }

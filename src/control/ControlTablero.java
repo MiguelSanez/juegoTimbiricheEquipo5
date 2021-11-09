@@ -4,9 +4,10 @@ package control;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import javax.swing.JOptionPane;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import juegotimbiriche.Figura;
+import juegotimbiriche.Juego;
 import juegotimbiriche.Jugador;
 import juegotimbiriche.TipoFigura;
 
@@ -17,16 +18,18 @@ import juegotimbiriche.TipoFigura;
 public class ControlTablero implements MouseListener {
     
     private JPanel panel;
-
+    private Juego partida;
+    private Control control= new Control();
+    
     public ControlTablero() {
     }
     
-    public ControlTablero(JPanel panel) {
+    public ControlTablero(JPanel panel, Juego partida) {
         this.panel = panel;
+        this.partida=partida;
     }
     
     public void acomodar(Figura[][] figuras, boolean add){
-        Control control= new Control();
         for(int x=0;x<19;x++){
             for(int y=0;y<19;y++){
                 if(add){
@@ -68,56 +71,54 @@ public class ControlTablero implements MouseListener {
                 }
             }
         }
+        partida.getTablero().setFiguras(figuras);
     }
     
     public void checar(Jugador jugador, Figura[][] figuras){
         for(int x=0;x<19;x++){
             for(int y=0;y<19;y++){
-                if(!figuras[x][y].getUso()){
+                if(figuras[x][y].getUso()){
                     if(figuras[x-1][y].getUso() && figuras[x+1][y].getUso() 
                             && figuras[x][y-1].getUso() 
                             && figuras[x][y+1].getUso()){
                         figuras[x][y].setJugador(jugador);
                         figuras[x][y].setUso(true);
-                        switch(jugador.getNumTurno()){
-                            case 1:
-                                jugador.sumarPuntaje();
-                                jugador.setTurno(true);
-                                break;
-                            case 2: 
-                                jugador.sumarPuntaje();
-                                jugador.setTurno(true);
-                                break;
-                            case 3:
-                                jugador.sumarPuntaje();
-                                jugador.setTurno(true);
-                                break;
-                            case 4:
-                                jugador.sumarPuntaje();
-                                jugador.setTurno(true);
-                                break;
-                        }
+                        jugador.sumarPuntaje();
+                        jugador.setTurno(true);
                     }
                 }
             }
+            System.out.println(x);
+        }
+        if(!control.checarTurnos(partida)){
+            partida= control.cambiarTurno(partida, jugador);
         }
     }
 
     @Override
     public void mouseClicked(MouseEvent me) {
-        JOptionPane.showMessageDialog(panel, "Funciona", "Información", JOptionPane.INFORMATION_MESSAGE); 
-//        for (int x = 0; x < 19; x++) {
-//            for (int y = 0; y < 19; y++) {
-//                me.getSource().
-//                vistamaquina.getBoton(x, y).setBackground(Color.black);
-//                vistamaquina.getBoton(x, y).setEnabled(false);
-//                ban = true;
-//                break;
-//            }
-//            if (ban) {
-//                break;
-//            }
-//        }
+        Figura figura= (Figura) me.getSource();
+        boolean encontrado=false;
+        for (int x = 0; x < 19; x++) {
+            for (int y = 0; y < 19; y++) {
+                if(partida.getTablero().getFiguras()[x][y]==figura){
+                    for (int i = 0; i < partida.getNumJugadores(); i++) {
+                        if(partida.getJugadores()[i].getTurno()){
+                            figura.setBackground(new Color(partida.getJugadores()[i].getColor()[0],
+                                    partida.getJugadores()[i].getColor()[1], 
+                                    partida.getJugadores()[i].getColor()[2]));
+                            figura.setUso(true);
+                            figura.setJugador(partida.getJugadores()[i]);
+                            figura.removeMouseListener(this);
+                            partida.getJugadores()[i].setTurno(false);
+                            checar(partida.getJugadores()[i], partida.getTablero().getFiguras());
+                        }
+                    }
+                    encontrado=true;
+                }
+            }
+            if(encontrado) break;
+        }
     }
 
     @Override

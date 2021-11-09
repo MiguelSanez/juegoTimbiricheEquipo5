@@ -1,6 +1,7 @@
 
 package juegotimbiriche;
 
+import java.util.Objects;
 import javax.swing.JLabel;
 
 /**
@@ -13,7 +14,7 @@ public class Figura extends JLabel{
      * Atributos de la clase Figura.
      */
     private Jugador jugador;
-    private boolean uso;
+    private boolean uso=false;
     private TipoFigura tipo;
 
     /**
@@ -53,6 +54,35 @@ public class Figura extends JLabel{
 
     public void setTipo(TipoFigura tipo) {
         this.tipo = tipo;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 67 * hash + Objects.hashCode(this.jugador);
+        hash = 67 * hash + Objects.hashCode(this.tipo);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Figura other = (Figura) obj;
+        if (!Objects.equals(this.jugador, other.jugador)) {
+            return false;
+        }
+        if (this.tipo != other.tipo) {
+            return false;
+        }
+        return true;
     }
 
     @Override

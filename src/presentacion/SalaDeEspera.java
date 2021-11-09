@@ -5,7 +5,9 @@ import control.Control;
 import java.awt.Color;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import juegotimbiriche.Juego;
 import juegotimbiriche.Jugador;
+import juegotimbiriche.Tablero;
 
 /**
  *
@@ -13,13 +15,14 @@ import juegotimbiriche.Jugador;
  */
 public class SalaDeEspera extends javax.swing.JDialog {
     private juegoTimbiriche juego;
-    private Jugador[] jugadores= new Jugador[4];
+    private Juego partida;
     
     public SalaDeEspera(java.awt.Frame parent, boolean modal, juegoTimbiriche juego, Jugador jugador1) {
         super(parent, modal);
         this.juego= juego;
-        this.jugadores[0]=jugador1;
         initComponents();
+        this.partida= new Juego(new Tablero("10x10"));
+        this.partida.getJugadores()[0]=jugador1;
         Control control= new Control();
         setLocationRelativeTo(null);
         fondoJugador1.setBackground(new Color(jugador1.getColor()[0], jugador1.getColor()[1], jugador1.getColor()[2]));
@@ -188,16 +191,17 @@ public class SalaDeEspera extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
-        presentacion.Tablero partida = new Tablero((java.awt.Frame) this.getParent(), true, this.juego, this.jugadores);
+        agregarCantJugadores();
         this.dispose();
+        presentacion.DlgTablero partida = new DlgTablero((java.awt.Frame) this.getParent(), true, this.juego, this.partida);
         partida.setVisible(true);
         partida.setLocationRelativeTo(this);
 
     }//GEN-LAST:event_btnIngresarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        MenuJuego partida = new MenuJuego((java.awt.Frame) this.getParent(), true, this.juego, this.jugadores[0]);
         this.dispose();
+        MenuJuego partida = new MenuJuego((java.awt.Frame) this.getParent(), true, this.juego, this.partida.getJugadores()[0]);
         partida.setVisible(true);
         partida.setLocationRelativeTo(this);
         
@@ -206,19 +210,29 @@ public class SalaDeEspera extends javax.swing.JDialog {
     public void mostrarJugadores(int numero){
         switch(numero){
             case 2: 
-                fondoJugador2.setBackground(new Color(jugadores[1].getColor()[0], jugadores[1].getColor()[1], jugadores[1].getColor()[2]));
-                nombreJugador2.setText(jugadores[1].getNombre());
+                fondoJugador2.setBackground(new Color(partida.getJugadores()[1].getColor()[0], partida.getJugadores()[1].getColor()[1], partida.getJugadores()[1].getColor()[2]));
+                nombreJugador2.setText(partida.getJugadores()[1].getNombre());
                 break;
             case 3: 
-                fondoJugador3.setBackground(new Color(jugadores[2].getColor()[0], jugadores[2].getColor()[1], jugadores[2].getColor()[2]));
-                nombreJugador3.setText(jugadores[2].getNombre());
+                fondoJugador3.setBackground(new Color(partida.getJugadores()[2].getColor()[0], partida.getJugadores()[2].getColor()[1], partida.getJugadores()[2].getColor()[2]));
+                nombreJugador3.setText(partida.getJugadores()[2].getNombre());
                 break; 
             case 4: 
-                fondoJugador4.setBackground(new Color(jugadores[3].getColor()[0], jugadores[3].getColor()[1], jugadores[3].getColor()[2]));
-                nombreJugador4.setText(jugadores[3].getNombre());
+                fondoJugador4.setBackground(new Color(partida.getJugadores()[3].getColor()[0], partida.getJugadores()[3].getColor()[1], partida.getJugadores()[3].getColor()[2]));
+                nombreJugador4.setText(partida.getJugadores()[3].getNombre());
                 break;
         }
         
+    }
+    
+    public void agregarCantJugadores(){
+        int cantJugadores=0;
+        for (int i =0; i<4; i++) {
+            if(partida.getJugadores()[i]!=null){
+                cantJugadores++;
+            }
+        }
+        partida.setNumJugadores(cantJugadores);
     }
     
     public class SimuladorThread extends Thread{
@@ -241,15 +255,15 @@ public class SalaDeEspera extends javax.swing.JDialog {
                 }
                 switch(i){
                     case 0: 
-                        jugadores[1]= control.crearJugador("Andrés", "Azul");
+                        partida.getJugadores()[1]= control.crearJugador("Andrés", "Azul");
                         sala.mostrarJugadores(2);
                         break;
                     case 1: 
-                        jugadores[2]= control.crearJugador("Michelle", "Rojo");
+                        partida.getJugadores()[2]= control.crearJugador("Michelle", "Rojo");
                         sala.mostrarJugadores(3);
                         break; 
                     case 2: 
-                        jugadores[3]= control.crearJugador("Clarisa", "Amarillo");
+                        partida.getJugadores()[3]= control.crearJugador("Clarisa", "Amarillo");
                         sala.mostrarJugadores(4);
                         break;
                 }

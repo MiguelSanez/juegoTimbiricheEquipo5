@@ -14,63 +14,48 @@ public class Tablero extends Juego{
     /**
      * Atributos de la clase Tablero.
      */
-    private double dimension;
-    private double ancho;
-    private double largo;
-    private Figura cuadro;
+    private String dimension;
+    private Figura[][] figuras;
 
     /**
      * Constructor por default de la clase Tablero.
      */
     public Tablero() {
     }
-
-    public Tablero(double dimension, double ancho, double largo, Figura cuadro) {
+    
+    public Tablero(String dimension){
         this.dimension = dimension;
-        this.ancho = ancho;
-        this.largo = largo;
-        this.cuadro = cuadro;
+        figuras= new Figura[19][19];
+    }
+
+    public Tablero(String dimension, Figura[][] figuras) {
+        this.dimension = dimension;
+        this.figuras = figuras;
     }
 
     /**
      * Gets y sets de la clase Tablero.
      * @return 
      */
-    public double getDimension() {
+    public String getDimension() {
         return dimension;
     }
 
-    public void setDimension(double dimension) {
+    public void setDimension(String dimension) {
         this.dimension = dimension;
     }
 
-    public double getAncho() {
-        return ancho;
+    public Figura[][] getFiguras() {
+        return figuras;
     }
 
-    public void setAncho(double ancho) {
-        this.ancho = ancho;
-    }
-
-    public double getLargo() {
-        return largo;
-    }
-
-    public void setLargo(double largo) {
-        this.largo = largo;
-    }
-
-    public Figura getCuadro() {
-        return cuadro;
-    }
-
-    public void setCuadro(Figura cuadro) {
-        this.cuadro = cuadro;
+    public void setFiguras(Figura[][] figuras) {
+        this.figuras = figuras;
     }
 
     @Override
     public String toString() {
-        return "Tablero{" + "dimension=" + dimension + ", ancho=" + ancho + ", largo=" + largo + '}';
+        return "Tablero{" + "dimension=" + dimension + '}';
     }
     
 }
