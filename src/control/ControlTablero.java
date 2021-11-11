@@ -21,7 +21,7 @@ public class ControlTablero implements MouseListener {
 
     private JPanel panel;
     private Juego partida;
-    private Control control = new Control();
+    private Control control = Control.getControl();
     private JLabel[] puntuaciones;
     private juegoTimbiriche juego;
 

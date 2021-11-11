@@ -11,8 +11,19 @@ import presentacion.SalaDeEspera;
 import presentacion.juegoTimbiriche;
 
 public class Control {
-
-    public Control() {
+    private Jugador[] jugadores=new Jugador[4];
+    private int conectados=0;
+    private static Control singleton;
+    private InterpreteConexion interprete;
+    
+    private Control() {
+        interprete=new InterpreteConexion(this);
+    }
+    public static Control getControl(){
+        if(singleton==null){
+            singleton=new Control();
+        }
+        return singleton;
     }
     
     public Jugador crearJugador(String nombre, String color){
@@ -89,6 +100,8 @@ public class Control {
         }
        
         Jugador jugador= new Jugador(colores, nombre);
+        jugadores[conectados]=jugador;
+        conectados++;
         return jugador;
     }
     
@@ -137,5 +150,10 @@ public class Control {
         partida.getJuego().dispose();
         SalaDeEspera sala = new SalaDeEspera((java.awt.Frame) juego.getParent(), true, juego, partida.getJugadores());
         sala.setVisible(true);
+    }
+     public void conectaJugador(Jugador jugador){
+        jugadores[conectados]=jugador;
+        SalaDeEspera.Conecta(jugadores);
+        conectados++;
     }
 }

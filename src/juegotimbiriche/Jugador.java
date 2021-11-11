@@ -26,6 +26,16 @@ public class Jugador extends Juego{
         this.color = color;
         this.nombre = nombre;
     }
+     public Jugador(String datos){
+        String[] aux=datos.split(",");
+        int[] color=new int[3];
+        for (int i = 0; i < aux.length-1; i++) {
+            String string = aux[i];
+            color[i]=Integer.parseInt(string);
+        }
+        this.color=color;
+        this.nombre=aux[3];
+    }
     
     /**
      * Gets y sets de la clase Jugador.
@@ -76,7 +86,7 @@ public class Jugador extends Juego{
 
     @Override
     public String toString() {
-        return "Jugador{" + "color=" + color + ", puntaje=" + puntaje + ", nombre=" + nombre + ", turno=" + turno + '}';
+        return color[0]+","+color[1] +","+color[2] + ","+nombre;
     }
     
 }

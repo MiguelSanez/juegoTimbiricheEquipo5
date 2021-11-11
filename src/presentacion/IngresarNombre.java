@@ -92,7 +92,7 @@ public class IngresarNombre extends javax.swing.JDialog {
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         if(validar()){
-            Control control= new Control();
+            Control control= Control.getControl();
             Jugador jugador= control.crearJugador(txtNombre.getText(), (String) cmbColor.getSelectedItem());
             MenuJuego juego = new MenuJuego((java.awt.Frame) this.getParent(), true, this.juego, jugador);
             this.dispose();

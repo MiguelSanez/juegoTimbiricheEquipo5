@@ -5,6 +5,8 @@ import control.Control;
 import java.awt.Color;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import juegotimbiriche.Juego;
 import juegotimbiriche.Jugador;
 import juegotimbiriche.Tablero;
@@ -16,6 +18,8 @@ import juegotimbiriche.Tablero;
 public class SalaDeEspera extends javax.swing.JDialog {
     private juegoTimbiriche juego;
     private Juego partida;
+        private static JPanel[] paneles=new JPanel[4];
+    private static JLabel[] nombres=new JLabel[4];
     
     public SalaDeEspera(java.awt.Frame parent, boolean modal, juegoTimbiriche juego, Jugador jugador1) {
         super(parent, modal);
@@ -23,12 +27,20 @@ public class SalaDeEspera extends javax.swing.JDialog {
         initComponents();
         this.partida= new Juego(new Tablero("10x10"));
         this.partida.getJugadores()[0]=jugador1;
-        Control control= new Control();
+        Control control= Control.getControl();
         setLocationRelativeTo(null);
         fondoJugador1.setBackground(new Color(jugador1.getColor()[0], jugador1.getColor()[1], jugador1.getColor()[2]));
         nombreJugador1.setText(jugador1.getNombre());
-        SimuladorThread t= new SimuladorThread(this,control);
-        t.start();
+         paneles[0]=fondoJugador1;
+        paneles[1]=fondoJugador2;
+        paneles[2]=fondoJugador3;
+        paneles[3]=fondoJugador4;
+        nombres[0]=nombreJugador1;
+        nombres[1]=nombreJugador2;
+        nombres[2]=nombreJugador3;
+        nombres[3]=nombreJugador4;
+        //SimuladorThread t= new SimuladorThread(this,control);
+        //t.start();
     }
     
     public SalaDeEspera(java.awt.Frame parent, boolean modal, juegoTimbiriche juego, Jugador[] jugadores){
@@ -40,6 +52,14 @@ public class SalaDeEspera extends javax.swing.JDialog {
         this.partida.getJugadores()[1]=jugadores[1];
         this.partida.getJugadores()[2]=jugadores[2];
         this.partida.getJugadores()[3]=jugadores[3];
+         paneles[0]=fondoJugador1;
+        paneles[1]=fondoJugador2;
+        paneles[2]=fondoJugador3;
+        paneles[3]=fondoJugador4;
+        nombres[0]=nombreJugador1;
+        nombres[1]=nombreJugador2;
+        nombres[2]=nombreJugador3;
+        nombres[3]=nombreJugador4;
         setLocationRelativeTo(null);
         mostrarJugadores();
     }
@@ -233,7 +253,18 @@ public class SalaDeEspera extends javax.swing.JDialog {
         fondoJugador4.setBackground(new Color(partida.getJugadores()[3].getColor()[0], partida.getJugadores()[3].getColor()[1], partida.getJugadores()[3].getColor()[2]));
         nombreJugador4.setText(partida.getJugadores()[3].getNombre());
     }
+    public static void Conecta(Jugador[] jugadores){
     
+        for (int i = 0; i < jugadores.length; i++) {
+            if(jugadores[i]==null){
+                
+            }else{
+             paneles[i].setBackground(new Color(jugadores[i].getColor()[0], jugadores[i].getColor()[1], jugadores[i].getColor()[2]));
+            nombres[i].setText(jugadores[i].getNombre());   
+            }
+            
+        }
+}
     public void mostrarJugadores(int numero){
         switch(numero){
             case 2: 

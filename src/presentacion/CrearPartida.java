@@ -2,6 +2,7 @@
 package presentacion;
 
 import juegotimbiriche.Jugador;
+import socket.Conexion;
 
 /**
  *
@@ -84,6 +85,8 @@ public class CrearPartida extends javax.swing.JDialog {
     private void btnCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearActionPerformed
         
         SalaDeEspera partida = new SalaDeEspera((java.awt.Frame) this.getParent(), true, this.juego, this.jugador);
+        Conexion.conecta(jugador.getNombre(),"localhost",5000,5001);
+        Conexion.getConexion();
         this.dispose();
         partida.setVisible(true);
         partida.setLocationRelativeTo(this);
