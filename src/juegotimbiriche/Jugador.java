@@ -1,6 +1,8 @@
 
 package juegotimbiriche;
 
+import java.net.InetAddress;
+
 /**
  *
  * @author Equipo 5
@@ -15,6 +17,8 @@ public class Jugador extends Juego{
     private String nombre;
     private Boolean turno= false;
     private int numTurno;
+    private InetAddress ip;
+    private int port;
 
     /**
      * Constructor por default de la clase Jugador.
@@ -46,6 +50,22 @@ public class Jugador extends Juego{
 
     public void setColor(int[] color) {
         this.color = color;
+    }
+
+    public InetAddress getIp() {
+        return ip;
+    }
+
+    public void setIp(InetAddress ip) {
+        this.ip = ip;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
     }
 
     public int getPuntaje() {

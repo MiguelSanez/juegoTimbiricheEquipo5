@@ -3,6 +3,8 @@ package presentacion;
 
 import control.Control;
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JLabel;
@@ -253,16 +255,17 @@ public class SalaDeEspera extends javax.swing.JDialog {
         fondoJugador4.setBackground(new Color(partida.getJugadores()[3].getColor()[0], partida.getJugadores()[3].getColor()[1], partida.getJugadores()[3].getColor()[2]));
         nombreJugador4.setText(partida.getJugadores()[3].getNombre());
     }
-    public static void Conecta(Jugador[] jugadores){
-    
-        for (int i = 0; i < jugadores.length; i++) {
-            if(jugadores[i]==null){
+    public static void Conecta(ArrayList jugadores){
+    int i=0;
+        for (Iterator iterator = jugadores.iterator(); iterator.hasNext();) {
+            Jugador next = (Jugador)iterator.next();
+            if(next==null){
                 
             }else{
-             paneles[i].setBackground(new Color(jugadores[i].getColor()[0], jugadores[i].getColor()[1], jugadores[i].getColor()[2]));
-            nombres[i].setText(jugadores[i].getNombre());   
+             paneles[i].setBackground(new Color(next.getColor()[0], next.getColor()[1], next.getColor()[2]));
+            nombres[i].setText(next.getNombre());   
+            i++;
             }
-            
         }
 }
     public void mostrarJugadores(int numero){

@@ -1,6 +1,7 @@
 
 package control;
 
+import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -11,7 +12,7 @@ import presentacion.SalaDeEspera;
 import presentacion.juegoTimbiriche;
 
 public class Control {
-    private Jugador[] jugadores=new Jugador[4];
+    private ArrayList <Jugador> jugadores=new ArrayList<Jugador>();
     private int conectados=0;
     private static Control singleton;
     private InterpreteConexion interprete;
@@ -100,7 +101,7 @@ public class Control {
         }
        
         Jugador jugador= new Jugador(colores, nombre);
-        jugadores[conectados]=jugador;
+        jugadores.add(jugador);
         conectados++;
         return jugador;
     }
@@ -152,7 +153,7 @@ public class Control {
         sala.setVisible(true);
     }
      public void conectaJugador(Jugador jugador){
-        jugadores[conectados]=jugador;
+        jugadores.add(jugador);
         SalaDeEspera.Conecta(jugadores);
         conectados++;
     }
