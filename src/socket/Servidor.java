@@ -21,9 +21,25 @@ import juegotimbiriche.Jugador;
  */
 public class Servidor extends Thread {
 
-    public static ArrayList<Jugador> usuarios = new ArrayList<Jugador>();
-    public static HashMap<String, InetAddress> map = new HashMap<String, InetAddress>();
-
+    private static ArrayList<Jugador> usuarios = new ArrayList<Jugador>();
+    private static HashMap<String, InetAddress> map = new HashMap<String, InetAddress>();
+    private static DatagramSocket yo = null;
+    private static InetAddress dirCliente = null;
+    private static int puertoCliente;
+    private static String recibido;
+    private static String aMandar;
+    private static Servidor singleton=null;
+ 
+    public static Servidor getServidor(){
+        if (singleton==null) {
+            singleton=new Servidor();
+        }
+        return singleton;
+    }
+    private Servidor(){
+        
+    }
+    
     public static void sendMessage(DatagramSocket yo, String aMandar, String niki) {
         DatagramPacket paquete;
         byte[] buffer;
@@ -35,7 +51,7 @@ public class Servidor extends Thread {
                 paquete = new DatagramPacket(buffer, buffer.length, userARecibir.getIp(), userARecibir.getPort());
                 try {
                     yo.send(paquete);
-                    System.out.println("sending message: " + aMandar);
+                    System.out.println("sending message: " + aMandar+ " a "+userARecibir.getNombre());
                 } catch (IOException e) {
                     System.out.println(e.getMessage());
                     System.exit(1);
@@ -43,18 +59,38 @@ public class Servidor extends Thread {
             }
         }
     }
+    private void registra(){
+                //formato de registro ".registra@color1,color2,color3,nombre"
+                String[] info = recibido.split("@");
+                String[] infoJ = info[1].split(",");
+                
+                    map.put(info[1], dirCliente);
+                    Jugador c = new Jugador();
+                    c.setIp(dirCliente);
+                    c.setPort(puertoCliente);
+                    c.setNombre(infoJ[3]);
+                    int[] color=new int[3];
+                    for (int i = 0; i < color.length; i++) {
+                    int j = Integer.parseInt(infoJ[i]);
+                    color[i]=j;
+                }
+                    c.setColor(color);
+                    usuarios.add(c);
+                    System.out.println("Se agrego al usuario " + info[1] + " " + c.getIp().toString());
+                    for (Iterator<Jugador> iterator = usuarios.iterator(); iterator.hasNext();) {
+                    Jugador next = iterator.next();
+                    sendMessage(yo, ".conecta@"+next.toString(), "@System@");
+                }
+
+    }
 
     @Override
     public void run() {
-        DatagramSocket yo = null;
+        
         DatagramPacket paquete;
-        InetAddress dirCliente = null;
-        int puertoCliente;
-        byte[] buffer = new byte[100];
-        String recibido;
-        String aMandar;
+        
         final int PUERTO = 5000;
-
+        byte[] buffer = new byte[100];
         try {
             yo = new DatagramSocket(PUERTO);
         } catch (SocketException e) {
@@ -77,30 +113,8 @@ public class Servidor extends Thread {
             dirCliente = paquete.getAddress();// Obtener la direcciÃ³n del cliente
             puertoCliente = paquete.getPort();
 
-            if (recibido.startsWith(".registrar")) {
-
-                String[] info = recibido.split("@");
-                String[] infoJ = info[1].split(",");
-                
-                    map.put(info[1], dirCliente);
-                    Jugador c = new Jugador();
-                    c.setIp(dirCliente);
-                    c.setPort(puertoCliente);
-                    c.setNombre(infoJ[3]);
-                    int[] color=new int[3];
-                    for (int i = 0; i < color.length; i++) {
-                    int j = Integer.parseInt(infoJ[i]);
-                    color[i]=j;
-                }
-                    c.setColor(color);
-                    usuarios.add(c);
-                    System.out.println("Se agrego al usuario " + info[1] + " " + c.getIp().toString());
-                    for (Iterator<Jugador> iterator = usuarios.iterator(); iterator.hasNext();) {
-                    Jugador next = iterator.next();
-                    sendMessage(yo, ".conecta@"+next.toString(), "@System@");
-                }
-                sendMessage(yo, ".termina", "@System@");
-
+            if (recibido.startsWith(".registra")) {
+                this.registra();
             }//registrar
 
         }//while

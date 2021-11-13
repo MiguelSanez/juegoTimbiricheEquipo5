@@ -88,6 +88,7 @@ public class SalaDeEspera extends javax.swing.JDialog {
         fondoCancelar = new javax.swing.JPanel();
         fondoIngresar = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         menu = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
 
@@ -217,6 +218,9 @@ public class SalaDeEspera extends javax.swing.JDialog {
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/SalaDeEspera.png"))); // NOI18N
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
+        jLabel2.setText("jLabel2");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, -1, -1));
+
         jMenu2.setText("Ayuda");
         menu.add(jMenu2);
 
@@ -242,7 +246,7 @@ public class SalaDeEspera extends javax.swing.JDialog {
         
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-    public void mostrarJugadores(){
+   public void mostrarJugadores(){
         fondoJugador1.setBackground(new Color(partida.getJugadores()[0].getColor()[0], partida.getJugadores()[0].getColor()[1], partida.getJugadores()[0].getColor()[2]));
         nombreJugador1.setText(partida.getJugadores()[0].getNombre());
         
@@ -255,18 +259,22 @@ public class SalaDeEspera extends javax.swing.JDialog {
         fondoJugador4.setBackground(new Color(partida.getJugadores()[3].getColor()[0], partida.getJugadores()[3].getColor()[1], partida.getJugadores()[3].getColor()[2]));
         nombreJugador4.setText(partida.getJugadores()[3].getNombre());
     }
+
     public static void Conecta(ArrayList jugadores){
     int i=0;
+        Jugador[] jugadors=Juego.getJugadores();
         for (Iterator iterator = jugadores.iterator(); iterator.hasNext();) {
             Jugador next = (Jugador)iterator.next();
-            if(next==null){
-                
-            }else{
+            
              paneles[i].setBackground(new Color(next.getColor()[0], next.getColor()[1], next.getColor()[2]));
             nombres[i].setText(next.getNombre());   
+            paneles[i].repaint();
+            jugadors[i]=next;
             i++;
-            }
+            System.out.println(next);
+            
         }
+        Juego.setJugador(jugadors);
 }
     public void mostrarJugadores(int numero){
         switch(numero){
@@ -342,12 +350,13 @@ public class SalaDeEspera extends javax.swing.JDialog {
     private javax.swing.JPanel fondoJugador3;
     private javax.swing.JPanel fondoJugador4;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar menu;
-    private javax.swing.JLabel nombreJugador1;
-    private javax.swing.JLabel nombreJugador2;
-    private javax.swing.JLabel nombreJugador3;
-    private javax.swing.JLabel nombreJugador4;
+    private static javax.swing.JLabel nombreJugador1;
+    private static javax.swing.JLabel nombreJugador2;
+    private static javax.swing.JLabel nombreJugador3;
+    private static javax.swing.JLabel nombreJugador4;
     // End of variables declaration//GEN-END:variables
     
 }

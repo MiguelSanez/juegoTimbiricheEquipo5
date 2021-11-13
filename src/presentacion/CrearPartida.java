@@ -1,8 +1,13 @@
 
 package presentacion;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import javax.swing.JOptionPane;
 import juegotimbiriche.Jugador;
+import socket.Cliente;
 import socket.Conexion;
+import socket.Servidor;
 
 /**
  *
@@ -83,10 +88,20 @@ public class CrearPartida extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearActionPerformed
-        
+        InetAddress dirServidor = null;
+        try {
+            dirServidor = InetAddress.getLocalHost(); // Obtener la direcciÃ³n del servidor dada en forma de parÃ¡metro
+        } catch (UnknownHostException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+         
+        }
         SalaDeEspera partida = new SalaDeEspera((java.awt.Frame) this.getParent(), true, this.juego, this.jugador);
-        Conexion.conecta(jugador.getNombre(),"localhost",5000,5001);
-        Conexion.getConexion();
+        Servidor servidor=Servidor.getServidor();
+        servidor.start();
+        Cliente cliente=Cliente.getCliente();
+            cliente.setIp(dirServidor);
+            cliente.start();
+            cliente.registrar(jugador);
         this.dispose();
         partida.setVisible(true);
         partida.setLocationRelativeTo(this);

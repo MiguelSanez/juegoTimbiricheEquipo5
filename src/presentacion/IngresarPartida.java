@@ -1,7 +1,11 @@
-
 package presentacion;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import juegotimbiriche.Jugador;
+import socket.Cliente;
 import socket.Conexion;
 
 /**
@@ -9,13 +13,14 @@ import socket.Conexion;
  * @author Equipo 5
  */
 public class IngresarPartida extends javax.swing.JDialog {
+
     private juegoTimbiriche juego;
     private Jugador jugador;
-    
+
     public IngresarPartida(java.awt.Frame parent, boolean modal, juegoTimbiriche juego, Jugador jugador) {
         super(parent, modal);
-        this.juego= juego;
-        this.jugador=jugador;
+        this.juego = juego;
+        this.jugador = jugador;
         initComponents();
         setLocationRelativeTo(null);
     }
@@ -82,12 +87,24 @@ public class IngresarPartida extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
-        SalaDeEspera partida = new SalaDeEspera((java.awt.Frame) this.getParent(), true, this.juego, this.jugador);
-        Conexion.conecta(jugador.getNombre(),"localhost",5001,5000);
-        Conexion.getConexion().enviar("JugadorConexion@"+jugador.toString());
-        this.dispose();
-        partida.setVisible(true);
-        partida.setLocationRelativeTo(this);
+        int err = 0;
+        InetAddress dirServidor = null;
+        try {
+            dirServidor = InetAddress.getByName(txtCodigo.getText()); // Obtener la direcciÃ³n del servidor dada en forma de parÃ¡metro
+        } catch (UnknownHostException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+            err++;
+        }
+        if (err == 0) {
+            SalaDeEspera partida = new SalaDeEspera((java.awt.Frame) this.getParent(), true, this.juego, this.jugador);
+            Cliente cliente=Cliente.getCliente();
+            cliente.setIp(dirServidor);
+            cliente.start();
+            cliente.registrar(jugador);
+            this.dispose();
+            partida.setVisible(true);
+            partida.setLocationRelativeTo(this);
+        }
 
     }//GEN-LAST:event_btnIngresarActionPerformed
 
@@ -96,10 +113,9 @@ public class IngresarPartida extends javax.swing.JDialog {
         this.dispose();
         partida.setVisible(true);
         partida.setLocationRelativeTo(this);
-            
+
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;

@@ -17,7 +17,7 @@ public class Juego {
      * Atributos de la clase Juego.
      */
     private int numJugadores;
-    private Jugador[] jugadores;
+    private static Jugador[] jugadores;
     private String status;
     private Tablero tablero;
     private JDialog juego;
@@ -59,12 +59,12 @@ public class Juego {
         this.numJugadores = numJugadores;
     }
 
-    public Jugador[] getJugadores() {
+    public static Jugador[] getJugadores() {
         return jugadores;
     }
 
-    public void setJugador(Jugador[] jugadores) {
-        this.jugadores = jugadores;
+    public static void setJugador(Jugador[] jugadores) {
+        Juego.jugadores = jugadores;
     }
 
     public String getStatus() {
