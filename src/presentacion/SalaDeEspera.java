@@ -265,7 +265,7 @@ public class SalaDeEspera extends javax.swing.JDialog {
         Jugador[] jugadors=Juego.getJugadores();
         for (Iterator iterator = jugadores.iterator(); iterator.hasNext();) {
             Jugador next = (Jugador)iterator.next();
-            
+           
              paneles[i].setBackground(new Color(next.getColor()[0], next.getColor()[1], next.getColor()[2]));
             nombres[i].setText(next.getNombre());   
             paneles[i].repaint();
