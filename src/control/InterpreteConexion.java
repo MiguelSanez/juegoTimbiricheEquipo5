@@ -10,7 +10,7 @@ import juegotimbiriche.Jugador;
 
 /**
  *
- * @author darkl
+ * @author Equipo 5
  */
 public class InterpreteConexion {
     private static Control control;

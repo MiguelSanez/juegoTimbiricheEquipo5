@@ -18,9 +18,10 @@ import juegotimbiriche.Tablero;
  * @author Equipo 5
  */
 public class SalaDeEspera extends javax.swing.JDialog {
+    
     private juegoTimbiriche juego;
     private Juego partida;
-        private static JPanel[] paneles=new JPanel[4];
+    private static JPanel[] paneles=new JPanel[4];
     private static JLabel[] nombres=new JLabel[4];
     
     public SalaDeEspera(java.awt.Frame parent, boolean modal, juegoTimbiriche juego, Jugador jugador1) {
@@ -33,7 +34,7 @@ public class SalaDeEspera extends javax.swing.JDialog {
         setLocationRelativeTo(null);
         fondoJugador1.setBackground(new Color(jugador1.getColor()[0], jugador1.getColor()[1], jugador1.getColor()[2]));
         nombreJugador1.setText(jugador1.getNombre());
-         paneles[0]=fondoJugador1;
+        paneles[0]=fondoJugador1;
         paneles[1]=fondoJugador2;
         paneles[2]=fondoJugador3;
         paneles[3]=fondoJugador4;
