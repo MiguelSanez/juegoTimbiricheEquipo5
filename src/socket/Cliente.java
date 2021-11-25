@@ -60,6 +60,18 @@ public class Cliente extends Thread {
             System.exit(1);
         }
     }
+    public void sendJugada(String jugada){
+        String mensaje = ".Jugada@" + jugada;
+        byte[] registrarBuffer = new byte[100];
+        registrarBuffer = mensaje.getBytes();
+        DatagramPacket registrar = new DatagramPacket(registrarBuffer, registrarBuffer.length, ip, PORT);
+        try {
+            yo.send(registrar);
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+            System.exit(1);
+        }
+    }
 
     private void conecta() {
         //formato de registro ".conecta@color1,color2,color3,nombre"

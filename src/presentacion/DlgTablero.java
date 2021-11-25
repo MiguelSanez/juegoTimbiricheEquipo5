@@ -6,6 +6,7 @@ import java.awt.Color;
 import javax.swing.JLabel;
 import juegotimbiriche.Juego;
 import juegotimbiriche.Jugador;
+import socket.Cliente;
 
 /**
  *
@@ -17,10 +18,12 @@ public class DlgTablero extends javax.swing.JDialog {
     private int turno;
     private ControlTablero controlTablero;
     private Juego partida;
+    private Cliente cliente;
     
     public DlgTablero(java.awt.Frame parent, boolean modal, juegoTimbiriche juego, Juego partida) {
         super(parent, modal);
         this.juego= juego;
+        this.cliente=Cliente.getCliente();
         this.turno=1;
         initComponents();
         this.partida=partida;
@@ -29,7 +32,6 @@ public class DlgTablero extends javax.swing.JDialog {
         setLocationRelativeTo(null);
         imprimirBotones();
         mostrarJugadores();
-        partida.getJugadores()[0].setTurno(true);
         partida.nuevoTurno();
     }
 

@@ -146,6 +146,10 @@ public class Control {
         return false;
     }
 
+    public static ArrayList<Jugador> getJugadores() {
+        return jugadores;
+    }
+
     public void finalizarPartida(Juego partida, juegoTimbiriche juego) {
         Jugador ganador = partida.getJugadores()[0];
         for (int i = 1; i < partida.getNumJugadores(); i++) {

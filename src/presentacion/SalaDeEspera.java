@@ -232,6 +232,7 @@ public class SalaDeEspera extends javax.swing.JDialog {
 
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
         agregarCantJugadores();
+        
         this.dispose();
         presentacion.DlgTablero partida = new DlgTablero((java.awt.Frame) this.getParent(), true, this.juego, this.partida);
         partida.setVisible(true);
@@ -268,7 +269,7 @@ public class SalaDeEspera extends javax.swing.JDialog {
             Jugador next = (Jugador)iterator.next();
             
             paneles[i].setBackground(new Color(next.getColor()[0], next.getColor()[1], next.getColor()[2]));
-            nombres[i].setText(next.getNombre().trim());   
+            nombres[i].setText(next.getNombre());   
             paneles[i].repaint();
             jugadors[i]=next;
             i++;

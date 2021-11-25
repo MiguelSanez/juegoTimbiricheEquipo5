@@ -38,7 +38,7 @@ public class Jugador extends Juego{
             color[i]=Integer.parseInt(string);
         }
         this.color=color;
-        this.nombre=aux[3];
+        this.nombre=aux[3].trim();
     }
     
     /**
