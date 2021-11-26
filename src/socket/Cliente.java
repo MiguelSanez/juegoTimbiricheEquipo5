@@ -73,7 +73,20 @@ public class Cliente extends Thread {
             System.exit(1);
         }
     }
-
+    
+    public void inicia(){
+        String mensaje = ".Inicia";
+        byte[] registrarBuffer = new byte[100];
+        registrarBuffer = mensaje.getBytes();
+        DatagramPacket registrar = new DatagramPacket(registrarBuffer, registrarBuffer.length, ip, PORT);
+        try {
+            yo.send(registrar);
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+            System.exit(1);
+        }
+    }
+    
     private void conecta() {
         //formato de registro ".conecta@color1,color2,color3,nombre"
         String[] info = recibido.split("@");
@@ -112,6 +125,9 @@ public class Cliente extends Thread {
             else if (recibido.startsWith(".Jugada")) {
                 String jugada=recibido.split("@")[1];
                 InterpreteConexion.interpretar("Jugada@"+jugada);
+            }//Jugada
+            else if (recibido.startsWith(".Inicia")) {
+                InterpreteConexion.interpretar("Inicia");
             }
         }//while
 

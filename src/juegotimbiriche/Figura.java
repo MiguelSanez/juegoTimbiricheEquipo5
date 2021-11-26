@@ -16,17 +16,23 @@ public class Figura extends JLabel{
     private Jugador jugador;
     private boolean uso=false;
     private TipoFigura tipo;
+    private int hash;
 
     /**
      * Constructor por defecto de la clase Cuadro.
      */
     public Figura(){
+        int hash = 7;
+        hash = 67 * hash + Objects.hashCode(this.jugador);
+        hash = 67 * hash + Objects.hashCode(this.tipo);
+        this.hash=hash;
     }
 
-    public Figura(Jugador jugador, boolean uso, TipoFigura tipo) {
+    public Figura(Jugador jugador, boolean uso, TipoFigura tipo,int hash) {
         this.jugador = jugador;
         this.uso= uso;
         this.tipo= tipo;
+        this.hash=hash;
     }
 
     /**
@@ -55,17 +61,19 @@ public class Figura extends JLabel{
     public void setTipo(TipoFigura tipo) {
         this.tipo = tipo;
     }
-
+    public void setHash(int hash){
+        this.hash=hash;
+    }
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 67 * hash + Objects.hashCode(this.jugador);
-        hash = 67 * hash + Objects.hashCode(this.tipo);
         return hash;
     }
 
     @Override
     public boolean equals(Object obj) {
+        if (hash==obj.hashCode()) {
+            return true;
+        }
         if (this == obj) {
             return true;
         }
@@ -90,7 +98,7 @@ public class Figura extends JLabel{
         return  jugador + ":" + uso +":"+this.tipo+":"+this.hashCode();
     }
     public static Figura toFigura(String datos){
-        Figura figura=new Figura(new Jugador(datos.split(":")[0]),Boolean.getBoolean(datos.split(":")[1]),TipoFigura.valueOf(datos.split(":")[2]));
+        Figura figura=new Figura(new Jugador(datos.split(":")[0]),Boolean.getBoolean(datos.split(":")[1]),TipoFigura.valueOf(datos.split(":")[2]),Integer.parseInt(datos.split(":")[3]));
         
         return figura;
     }

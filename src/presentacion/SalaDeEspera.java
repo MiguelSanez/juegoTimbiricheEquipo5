@@ -2,6 +2,7 @@
 package presentacion;
 
 import control.Control;
+import control.InterpreteConexion;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -12,6 +13,7 @@ import javax.swing.JPanel;
 import juegotimbiriche.Juego;
 import juegotimbiriche.Jugador;
 import juegotimbiriche.Tablero;
+import socket.Cliente;
 
 /**
  *
@@ -42,6 +44,12 @@ public class SalaDeEspera extends javax.swing.JDialog {
         nombres[1]=nombreJugador2;
         nombres[2]=nombreJugador3;
         nombres[3]=nombreJugador4;
+        InterpreteConexion.setSala(this);
+        if(jugador1.getNombre().equalsIgnoreCase(Juego.getJugadores()[0].getNombre())){
+            this.btnIngresar.setVisible(true);
+        }else{
+            this.btnIngresar.setVisible(false);
+        }
         //SimuladorThread t= new SimuladorThread(this,control);
         //t.start();
     }
@@ -233,13 +241,15 @@ public class SalaDeEspera extends javax.swing.JDialog {
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
         agregarCantJugadores();
         
+        Cliente.getCliente().inicia();
+
+    }//GEN-LAST:event_btnIngresarActionPerformed
+    public void inicia(){
         this.dispose();
         presentacion.DlgTablero partida = new DlgTablero((java.awt.Frame) this.getParent(), true, this.juego, this.partida);
         partida.setVisible(true);
         partida.setLocationRelativeTo(this);
-
-    }//GEN-LAST:event_btnIngresarActionPerformed
-
+    }
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         this.dispose();
         MenuJuego partida = new MenuJuego((java.awt.Frame) this.getParent(), true, this.juego, this.partida.getJugadores()[0]);

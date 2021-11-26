@@ -25,7 +25,8 @@ public class Control {
     private InterpreteConexion interprete;
 
     private Control() {
-        interprete = new InterpreteConexion(this);
+        interprete = InterpreteConexion.getInterprete();
+        InterpreteConexion.setControl(this);
     }
 
     public static Control getControl() {

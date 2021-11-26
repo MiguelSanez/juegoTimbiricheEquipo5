@@ -41,11 +41,14 @@ public class ControlTablero implements MouseListener {
     }
 
     public void acomodar(Figura[][] figuras, boolean add) {
+        int i=0;
         for (int x = 0; x < 19; x++) {
             for (int y = 0; y < 19; y++) {
                 if (add) {
                     figuras[x][y] = new Figura();
                     figuras[x][y].addMouseListener(this);
+                    figuras[x][y].setHash(i);
+                    i++;
                 } else {
                     figuras[x][y].setJugador(null);
                     figuras[x][y].setUso(false);

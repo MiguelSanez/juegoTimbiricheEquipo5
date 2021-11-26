@@ -5,32 +5,51 @@
  */
 package control;
 
-import control.Control;
 import juegotimbiriche.Figura;
 import juegotimbiriche.Jugador;
+import presentacion.SalaDeEspera;
 
 /**
  *
  * @author Equipo 5
  */
 public class InterpreteConexion {
+
     private static Control control;
-    public InterpreteConexion(Control control){
-        this.control=control;
+    private static InterpreteConexion singleton;
+    private static SalaDeEspera sala;
+
+    private InterpreteConexion() {
+
     }
-    
-    public static void interpretar(String mensaje){
-        String mando=mensaje.split("@")[0];
+
+    public static InterpreteConexion getInterprete() {
+        if (singleton == null) {
+            singleton = new InterpreteConexion();
+        }
+        return singleton;
+    }
+
+    public static void setControl(Control control) {
+        InterpreteConexion.control = control;
+    }
+
+    public static void setSala(SalaDeEspera sala) {
+        InterpreteConexion.sala = sala;
+    }
+
+    public static void interpretar(String mensaje) {
+        String mando = mensaje.split("@")[0];
         if (mando.equalsIgnoreCase("JugadorConexion")) {
-            Jugador jugador=new Jugador(mensaje.split("@")[1]);
+            Jugador jugador = new Jugador(mensaje.split("@")[1]);
             InterpreteConexion.control.conectaJugador(jugador);
-        }else if(mando.equalsIgnoreCase("Jugada")){
-            String jugada=mensaje.split("@")[1].trim();
-            Figura figura=Figura.toFigura(jugada.split(" ")[0]);
+        } else if (mando.equalsIgnoreCase("Jugada")) {
+            String jugada = mensaje.split("@")[1].trim();
+            Figura figura = Figura.toFigura(jugada.split(" ")[0]);
             ControlTablero.rayar(figura);
+        } else if(mensaje.startsWith("Inicia")){
+            sala.inicia();
         }
     }
-    
-    
-    
+
 }

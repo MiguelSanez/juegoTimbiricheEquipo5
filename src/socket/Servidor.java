@@ -123,6 +123,10 @@ public class Servidor extends Thread {
                 sendMessage(yo, recibido, "@System@");
             }//Jugada
             
+            if (recibido.startsWith(".Inicia")) {
+                sendMessage(yo, recibido, "@System@");
+            }//Inicia partida
+            
         }//while
 
     }//run
