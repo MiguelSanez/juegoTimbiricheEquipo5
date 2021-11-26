@@ -5,6 +5,8 @@
  */
 package juegotimbiriche;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import javax.swing.JDialog;
 
 /**
@@ -16,11 +18,11 @@ public class Juego {
     /**
      * Atributos de la clase Juego.
      */
-    private int numJugadores;
+    private static int numJugadores;
     private static Jugador[] jugadores;
     private String status;
-    private Tablero tablero;
-    private JDialog juego;
+    private static Tablero tablero;
+    private static JDialog juego;
     private int turnoActual=0;
 
     /***
@@ -51,7 +53,7 @@ public class Juego {
      * Gets y sets de la clase Juego.
      * @return 
      */
-    public int getNumJugadores() {
+    public static int getNumJugadores() {
         return numJugadores;
     }
 
@@ -66,7 +68,15 @@ public class Juego {
     public static void setJugador(Jugador[] jugadores) {
         Juego.jugadores = jugadores;
     }
-
+    public static void setJugador(ArrayList jugadores){
+        Jugador[] jugadors=new Jugador[numJugadores];
+        int i=0;
+        for (Iterator iterator = jugadores.iterator(); iterator.hasNext();) {
+            Jugador next = (Jugador)iterator.next();
+            jugadors[i]=next;
+        }
+        Juego.jugadores=jugadors;
+    }
     public String getStatus() {
         return status;
     }
@@ -75,7 +85,7 @@ public class Juego {
         this.status = status;
     }
 
-    public Tablero getTablero() {
+    public static Tablero getTablero() {
         return tablero;
     }
 
@@ -83,7 +93,7 @@ public class Juego {
         this.tablero = tablero;
     }
 
-    public JDialog getJuego() {
+    public static JDialog getJuego() {
         return juego;
     }
 

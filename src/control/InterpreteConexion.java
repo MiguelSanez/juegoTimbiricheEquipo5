@@ -6,6 +6,7 @@
 package control;
 
 import control.Control;
+import juegotimbiriche.Figura;
 import juegotimbiriche.Jugador;
 
 /**
@@ -23,6 +24,10 @@ public class InterpreteConexion {
         if (mando.equalsIgnoreCase("JugadorConexion")) {
             Jugador jugador=new Jugador(mensaje.split("@")[1]);
             InterpreteConexion.control.conectaJugador(jugador);
+        }else if(mando.equalsIgnoreCase("Jugada")){
+            String jugada=mensaje.split("@")[1].trim();
+            Figura figura=Figura.toFigura(jugada.split(" ")[0]);
+            ControlTablero.rayar(figura);
         }
     }
     

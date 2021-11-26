@@ -61,6 +61,7 @@ public class Cliente extends Thread {
         }
     }
     public void sendJugada(String jugada){
+        //formato de la jugada: ".Jugada@"
         String mensaje = ".Jugada@" + jugada;
         byte[] registrarBuffer = new byte[100];
         registrarBuffer = mensaje.getBytes();
@@ -89,6 +90,7 @@ public class Cliente extends Thread {
         usuarios.add(c);
         InterpreteConexion.interpretar("JugadorConexion@" + c.toString());
     }
+    
 
     @Override
     public void run() {
@@ -107,6 +109,10 @@ public class Cliente extends Thread {
             if (recibido.startsWith(".conecta")) {
                 this.conecta();
             }//conecta
+            else if (recibido.startsWith(".Jugada")) {
+                String jugada=recibido.split("@")[1];
+                InterpreteConexion.interpretar("Jugada@"+jugada);
+            }
         }//while
 
     }//run

@@ -4,6 +4,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
@@ -149,21 +150,42 @@ public class Control {
     public static ArrayList<Jugador> getJugadores() {
         return jugadores;
     }
+    public static void cambiaTurno(){
+        int turn=0;
+        for (int i = 0; i < jugadores.size(); i++) {
+            Jugador jugador = jugadores.get(i);
+            if (jugador.getTurno()) {
+                jugador.setTurno(false);
+                turn=i;
+            }
+        }
+        if (turn>=jugadores.size()) {
+            turn=0;
+        }
+        jugadores.get(turn).setTurno(true);
+        
+        Juego.setJugador(jugadores);
+    }
 
-    public void finalizarPartida(Juego partida, juegoTimbiriche juego) {
-        Jugador ganador = partida.getJugadores()[0];
-        for (int i = 1; i < partida.getNumJugadores(); i++) {
-            if (partida.getJugadores()[i].getPuntaje() > ganador.getPuntaje()) {
-                ganador = partida.getJugadores()[i];
+    public static void finalizarPartida( juegoTimbiriche juego) {
+        Jugador ganador = Juego.getJugadores()[0];
+        for (int i = 1; i < Juego.getNumJugadores(); i++) {
+            if (Juego.getJugadores()[i].getPuntaje() > ganador.getPuntaje()) {
+                ganador = Juego.getJugadores()[i];
             }
         }
         JOptionPane.showMessageDialog(null, "El ganador es " + ganador.getNombre(), "Juego finalizado", JOptionPane.INFORMATION_MESSAGE);
-        partida.getJuego().dispose();
-        SalaDeEspera sala = new SalaDeEspera((java.awt.Frame) juego.getParent(), true, juego, partida.getJugadores());
+        Juego.getJuego().dispose();
+        SalaDeEspera sala = new SalaDeEspera((java.awt.Frame) juego.getParent(), true, juego, Juego.getJugadores());
         sala.setVisible(true);
     }
 
     public void conectaJugador(Jugador jugador) {
+        if (jugadores.isEmpty()) {
+            jugador.setTurno(true);
+        }else{
+            jugador.setTurno(false);
+        }
         if (map.get(jugador.getNombre()) == null) {
             jugadores.add(jugador);
             try {

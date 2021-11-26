@@ -15,7 +15,7 @@ public class Tablero extends Juego{
      * Atributos de la clase Tablero.
      */
     private String dimension;
-    private Figura[][] figuras;
+    private static Figura[][] figuras;
 
     /**
      * Constructor por default de la clase Tablero.
@@ -45,7 +45,7 @@ public class Tablero extends Juego{
         this.dimension = dimension;
     }
 
-    public Figura[][] getFiguras() {
+    public static Figura[][] getFiguras() {
         return figuras;
     }
 

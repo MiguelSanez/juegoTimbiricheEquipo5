@@ -87,7 +87,12 @@ public class Figura extends JLabel{
 
     @Override
     public String toString() {
-        return "Cuadro{" + "nombre=" + jugador.getNombre() + ", uso=" + uso +", tipoFigura="+this.tipo+'}';
+        return  jugador + ":" + uso +":"+this.tipo+":"+this.hashCode();
+    }
+    public static Figura toFigura(String datos){
+        Figura figura=new Figura(new Jugador(datos.split(":")[0]),Boolean.getBoolean(datos.split(":")[1]),TipoFigura.valueOf(datos.split(":")[2]));
+        
+        return figura;
     }
     
 }

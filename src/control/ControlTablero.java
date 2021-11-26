@@ -23,8 +23,8 @@ public class ControlTablero implements MouseListener {
     private JPanel panel;
     private Juego partida;
     private Control control = Control.getControl();
-    private JLabel[] puntuaciones;
-    private juegoTimbiriche juego;
+    private static JLabel[] puntuaciones;
+    private static juegoTimbiriche juego;
     private Cliente cliente;
 
     public ControlTablero() {
@@ -81,7 +81,7 @@ public class ControlTablero implements MouseListener {
         partida.getTablero().setFiguras(figuras);
     }
 
-    public void checar(Jugador jugador, Figura[][] figuras) {
+    private static void checar(Jugador jugador, Figura[][] figuras) {
         for (int x = 0; x < 19; x++) {
             for (int y = 0; y < 19; y++) {
                 if (figuras[x][y].getTipo().equals(TipoFigura.CUADRO) && !figuras[x][y].getUso()) {
@@ -96,11 +96,10 @@ public class ControlTablero implements MouseListener {
                             System.out.println("Color assigned to current box: " + figuras[x][y].getBackground());
 
                             jugador.sumarPuntaje();
-                            jugador.setTurno(true);
-                            puntuaciones[0].setText("" + partida.getJugadores()[0].getPuntaje());
-                            puntuaciones[1].setText("" + partida.getJugadores()[1].getPuntaje());
-                            puntuaciones[2].setText("" + partida.getJugadores()[2].getPuntaje());
-                            puntuaciones[3].setText("" + partida.getJugadores()[3].getPuntaje());
+                            ControlTablero.puntuaciones[0].setText("" + Juego.getJugadores()[0].getPuntaje());
+                            ControlTablero.puntuaciones[1].setText("" + Juego.getJugadores()[1].getPuntaje());
+                            ControlTablero.puntuaciones[2].setText("" + Juego.getJugadores()[2].getPuntaje());
+                            ControlTablero.puntuaciones[3].setText("" + Juego.getJugadores()[3].getPuntaje());
                         }
                     } catch (Exception e) {
                         System.out.println("Error: " + e);
@@ -109,10 +108,10 @@ public class ControlTablero implements MouseListener {
                 }
             }
         }
-        partida = control.cambiarTurno(partida, jugador);
+        Control.cambiaTurno();
     }
 
-    public boolean paraGanar(Figura[][] figuras) {
+    private static boolean paraGanar(Figura[][] figuras) {
         for (int x = 0; x < 19; x++) {
             for (int y = 0; y < 19; y++) {
                 if (figuras[x][y].getTipo().equals(TipoFigura.CUADRO) && !figuras[x][y].getUso()) {
@@ -122,18 +121,41 @@ public class ControlTablero implements MouseListener {
         }
         return true;
     }
-    private void rayar(Figura figura, int i){
-        figura.setBackground(new Color(partida.getJugadores()[i].getColor()[0],
-                                    partida.getJugadores()[i].getColor()[1],
-                                    partida.getJugadores()[i].getColor()[2]));
+    public static void rayar(Figura figura){
+        boolean encontrado = false;
+        System.out.println(figura.hashCode()+" despues de enviar");
+        for (int x = 0; x < 19; x++) {
+            for (int y = 0; y < 19; y++) {
+                if (Juego.getTablero().getFiguras()[x][y].equals(figura)) {
+                    figura=Juego.getTablero().getFiguras()[x][y];
+                    System.out.println("si quiera llego? "+figura.hashCode());
+                    for (int i = 0; i < Juego.getNumJugadores(); i++) {
+                        if (Juego.getJugadores()[i].getTurno()) {
                             figura.setUso(true);
-                            figura.setJugador(partida.getJugadores()[i]);
-                            figura.removeMouseListener(this);
+                            figura.setJugador(Juego.getJugadores()[i]);
+                            figura.setBackground(new Color(Juego.getJugadores()[i].getColor()[0],
+                                    Juego.getJugadores()[i].getColor()[1],
+                                    Juego.getJugadores()[i].getColor()[2]));
+                            
                             figura.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-                            checar(partida.getJugadores()[i], partida.getTablero().getFiguras());
-                            if (paraGanar(partida.getTablero().getFiguras())) {
-                                control.finalizarPartida(partida, juego);
+                            ControlTablero.checar(Juego.getJugadores()[i], Juego.getTablero().getFiguras());
+                            if (paraGanar(Juego.getTablero().getFiguras())) {
+                                Control.finalizarPartida(juego);
                             }
+                            break;
+                            
+                        }
+                    }
+                    encontrado = true;
+                }
+            }
+            if (encontrado) {
+                break;
+            }
+        }
+        
+        
+        
     }
 
     @Override
@@ -146,8 +168,11 @@ public class ControlTablero implements MouseListener {
                 if (partida.getTablero().getFiguras()[x][y] == figura) {
                     for (int i = 0; i < partida.getNumJugadores(); i++) {
                         if (partida.getJugadores()[i].getTurno()) {
-                            
-                            rayar(figura,i);
+                            figura.removeMouseListener(this);
+                            figura.setUso(true);
+                            figura.setJugador(Juego.getJugadores()[i]);
+                            System.out.println(figura.hashCode()+" antes de enviar");
+                            cliente.sendJugada(figura.toString()+" "+i);
                             break;
                             
                         }
