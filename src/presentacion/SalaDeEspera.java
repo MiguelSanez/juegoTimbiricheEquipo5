@@ -73,6 +73,7 @@ public class SalaDeEspera extends javax.swing.JDialog {
         nombres[3]=nombreJugador4;
         setLocationRelativeTo(null);
         mostrarJugadores();
+        
     }
 
     /**
@@ -239,12 +240,13 @@ public class SalaDeEspera extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
-        agregarCantJugadores();
+        
         
         Cliente.getCliente().inicia();
 
     }//GEN-LAST:event_btnIngresarActionPerformed
     public void inicia(){
+        agregarCantJugadores();
         this.dispose();
         presentacion.DlgTablero partida = new DlgTablero((java.awt.Frame) this.getParent(), true, this.juego, this.partida);
         partida.setVisible(true);
