@@ -175,7 +175,7 @@ public class Control {
                 ganador = Juego.getJugadores()[i];
             }
         }
-        JOptionPane.showMessageDialog(null, "El ganador es " + ganador.getNombre(), "Juego finalizado", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(null, "El ganador es " + ganador.getNombre(), "Partida finalizada", JOptionPane.INFORMATION_MESSAGE);
         Juego.getJuego().dispose();
         SalaDeEspera sala = new SalaDeEspera((java.awt.Frame) juego.getParent(), true, juego, Juego.getJugadores());
         sala.setVisible(true);
