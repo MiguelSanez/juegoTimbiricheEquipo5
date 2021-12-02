@@ -5,7 +5,10 @@
  */
 package socket;
 
+import Dominio.Jugador;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -13,7 +16,7 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import juegotimbiriche.Jugador;
+import java.util.List;
 
 /**
  *
@@ -21,69 +24,66 @@ import juegotimbiriche.Jugador;
  */
 public class Servidor extends Thread {
 
-    private static ArrayList<Jugador> usuarios = new ArrayList<Jugador>();
-    private static HashMap<String, InetAddress> map = new HashMap<String, InetAddress>();
-    private static DatagramSocket yo = null;
-    private static InetAddress dirCliente = null;
-    private static int puertoCliente;
-    private static String recibido;
-    private static String aMandar;
-    private static Servidor singleton = null;
+    private List<Jugador> usuarios = new ArrayList<>();
+    private HashMap<Object, InetAddress> map = new HashMap<>();
+    private DatagramSocket serverTunnel;
+    private InetAddress clientAddress;
+    private int puertoCliente;
+    private Object recibido;
+    private Object aMandar;
 
-    public static Servidor getServidor() {
-        if (singleton == null) {
-            singleton = new Servidor();
-        }
-        return singleton;
+    public Servidor() {
     }
 
-    private Servidor() {
-
-    }
-
-    public static void sendMessage(DatagramSocket yo, String aMandar, String niki) {
+    private void sendMessage(DatagramSocket serverTunnel, Object aMandar, String niki) {
         DatagramPacket paquete;
-        byte[] buffer;
-        buffer = new byte[100];
-        buffer = aMandar.getBytes();
-        for (int i = 0; i < usuarios.size(); i++) {
-            Jugador userARecibir = usuarios.get(i);
-            if (!userARecibir.getNombre().equalsIgnoreCase(niki)) {
-                paquete = new DatagramPacket(buffer, buffer.length, userARecibir.getIp(), userARecibir.getPort());
-                try {
-                    yo.send(paquete);
-                    System.out.println("sending message: " + aMandar + " a " + userARecibir.getNombre());
-                } catch (IOException e) {
-                    System.out.println(e.getMessage());
-                    System.exit(1);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ObjectOutputStream out;
+
+        try {
+            out = new ObjectOutputStream(bos);
+            out.writeObject(aMandar);
+            out.flush();
+            byte[] buffer = bos.toByteArray();
+
+            for (int i = 0; i < usuarios.size(); i++) {
+                Jugador userARecibir = usuarios.get(i);
+                if (!userARecibir.getNombre().equalsIgnoreCase(niki)) {
+                    paquete = new DatagramPacket(buffer, buffer.length, userARecibir.getIp(), userARecibir.getPort());
+                    try {
+                        serverTunnel.send(paquete);
+                        System.out.println("Sending message: " + aMandar + " a " + userARecibir.getNombre());
+                    } catch (IOException e) {
+                        System.out.println(e.getMessage());
+                        System.exit(1);
+                    }
                 }
             }
+        } catch (IOException ex) {
+            System.out.println("Fallo al leer los bytes del mensaje. a");
         }
+
     }
 
     private void registra() {
         //formato de registro ".registra@color1,color2,color3,nombre"
-        String[] info = recibido.split("@");
-        String[] infoJ = info[1].split(",");
 
-        map.put(info[1], dirCliente);
-        Jugador c = new Jugador();
-        c.setIp(dirCliente);
-        c.setPort(puertoCliente);
-        c.setNombre(infoJ[3]);
-        int[] color = new int[3];
-        for (int i = 0; i < color.length; i++) {
-            int j = Integer.parseInt(infoJ[i]);
-            color[i] = j;
+        if (map.size() < 4) {
+            map.put(recibido, clientAddress);
+            Jugador clienteJugador = new Jugador();
+            clienteJugador.setIp(clientAddress);
+            clienteJugador.setPort(puertoCliente);
+            clienteJugador.setNombre(((Jugador) recibido).getNombre());
+            clienteJugador.setColor(((Jugador) recibido).getColor());
+            usuarios.add(clienteJugador);
+            System.out.println("Se agrego al usuario " + clienteJugador.getNombre() + " " + clienteJugador.getIp().toString());
+            for (Iterator<Jugador> iterator = usuarios.iterator(); iterator.hasNext();) {
+                Jugador next = iterator.next();
+                sendMessage(serverTunnel, ".conecta@" + next.toString(), "@System@");
+            }
+        } else {
+            System.out.println("Servidor lleno. a");
         }
-        c.setColor(color);
-        usuarios.add(c);
-        System.out.println("Se agrego al usuario " + info[1] + " " + c.getIp().toString());
-        for (Iterator<Jugador> iterator = usuarios.iterator(); iterator.hasNext();) {
-            Jugador next = iterator.next();
-            sendMessage(yo, ".conecta@" + next.toString(), "@System@");
-        }
-
     }
 
     @Override
@@ -91,43 +91,30 @@ public class Servidor extends Thread {
 
         DatagramPacket paquete;
 
-        final int PUERTO = 5000;
-        byte[] buffer = new byte[100];
+        byte[] buffer;
         try {
-            yo = new DatagramSocket(PUERTO);
+            serverTunnel = new DatagramSocket(5000);
+
+            while (true) {
+
+                buffer = new byte[100];
+                paquete = new DatagramPacket(buffer, buffer.length);
+
+                try {
+                    serverTunnel.receive(paquete);
+                } catch (IOException e) {
+                    System.out.println(e.getMessage());
+                    System.exit(1);
+                }
+
+                recibido = new String(paquete.getData()).trim(); // Extraer los datos recibidos y transformalos a String
+                clientAddress = paquete.getAddress();// Obtener la direcciÃ³n del cliente
+                puertoCliente = paquete.getPort();
+
+            }//while
         } catch (SocketException e) {
             System.out.println(e.getMessage());
-            System.exit(1);
         }
-        while (true) {
-
-            buffer = new byte[100];
-            paquete = new DatagramPacket(buffer, buffer.length);
-
-            try {
-                yo.receive(paquete);
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-                System.exit(1);
-            }
-
-            recibido = new String(paquete.getData()).trim(); // Extraer los datos recibidos y transformalos a String
-            dirCliente = paquete.getAddress();// Obtener la direcciÃ³n del cliente
-            puertoCliente = paquete.getPort();
-
-            if (recibido.startsWith(".registra")) {
-                this.registra();
-            }//registrar
-            
-            if (recibido.startsWith(".Jugada")) {
-                sendMessage(yo, recibido, "@System@");
-            }//Jugada
-            
-            if (recibido.startsWith(".Inicia")) {
-                sendMessage(yo, recibido, "@System@");
-            }//Inicia partida
-            
-        }//while
 
     }//run
 

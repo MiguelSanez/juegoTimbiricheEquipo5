@@ -1,41 +1,54 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package control;
 
+import Dominio.Figura;
+import Dominio.Juego;
+import Dominio.Jugador;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import juegotimbiriche.Figura;
-import juegotimbiriche.Juego;
-import juegotimbiriche.Jugador;
-import presentacion.SalaDeEspera;
-import presentacion.juegoTimbiriche;
+import presentacion.FrmSalaEspera;
 
 public class Control {
 
-    private static ArrayList<Jugador> jugadores = new ArrayList<Jugador>();
-    private static HashMap<String, InetAddress> map = new HashMap<String, InetAddress>();
-    private int conectados = 0;
-    private static Control singleton;
-    private InterpreteConexion interprete;
+    private Juego partida;
+    private HashMap<Object, InetAddress> map = new HashMap<>();
+    private InterpreteConexion interprete = InterpreteConexion.getInstance();
 
-    private Control() {
-        interprete = InterpreteConexion.getInterprete();
-        InterpreteConexion.setControl(this);
-    }
+    private static Control instance;
 
-    public static Control getControl() {
-        if (singleton == null) {
-            singleton = new Control();
+    /**
+     *
+     * @return
+     */
+    public static Control getInstance() {
+        if (instance == null) {
+            instance = new Control();
         }
-        return singleton;
+        return instance;
     }
 
+    /**
+     *
+     */
+    private Control() {
+        interprete.setControl(instance);
+    }
+
+    /**
+     *
+     * @param nombre
+     * @param color
+     * @return
+     */
     public Jugador crearJugador(String nombre, String color) {
 
         int[] colores = new int[3];
@@ -110,10 +123,14 @@ public class Control {
         }
 
         Jugador jugador = new Jugador(colores, nombre);
-        conectados++;
         return jugador;
     }
 
+    /**
+     *
+     * @param figura
+     * @param panel
+     */
     public void agregarBotones(Figura figura, JPanel panel) {
         figura.setOpaque(true);
         figura.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
@@ -121,82 +138,53 @@ public class Control {
         figura.setVisible(true);
     }
 
-    public Juego cambiarTurno(Juego partida, Jugador jugador) {
-        int idx = 0;
-        int turnoIdx = partida.getTurnoActual();
-        System.out.println("Actual turn " + turnoIdx);
-        if (!jugador.getTurno()) {
-            for (Jugador j : partida.getJugadores()) {
-                boolean turno = turnoIdx % partida.getNumJugadores() == idx++;
-                j.setTurno(turno);
-                if (turno) {
-                    System.out.println("Turn given to " + j.getNombre() + " idx " + idx);
-                    break;
-                }
-            }
-            partida.nuevoTurno();
-        }
-        return partida;
+    /**
+     *
+     * @return
+     */
+    public List<Jugador> getJugadores() {
+        return partida.getJugadores();
     }
 
-    public boolean checarTurnos(Juego partida) {
-        for (int i = 0; i < partida.getNumJugadores(); i++) {
-            if (partida.getJugadores()[i].getTurno()) {
-                return true;
+    /**
+     *
+     * @param juego
+     */
+    public void finalizarPartida(Juego juego) {
+        Jugador ganador = juego.getJugadores().get(0);
+        for (int i = 1; i < juego.getNumJugadores(); i++) {
+            if (juego.getJugadores().get(i).getPuntaje() > ganador.getPuntaje()) {
+                ganador = juego.getJugadores().get(i);
             }
         }
-        return false;
-    }
 
-    public static ArrayList<Jugador> getJugadores() {
-        return jugadores;
-    }
-    public static void cambiaTurno(){
-        int turn=0;
-        for (int i = 0; i < jugadores.size(); i++) {
-            Jugador jugador = jugadores.get(i);
-            if (jugador.getTurno()) {
-                jugador.setTurno(false);
-                turn=i;
-            }
-        }
-        if (turn>=jugadores.size()) {
-            turn=0;
-        }
-        jugadores.get(turn).setTurno(true);
-        
-        Juego.setJugador(jugadores);
-    }
+        JOptionPane.showMessageDialog(null, "El ganador es " + ganador.getNombre(), "Juego finalizado", JOptionPane.INFORMATION_MESSAGE);
 
-    public static void finalizarPartida( juegoTimbiriche juego) {
-        Jugador ganador = Juego.getJugadores()[0];
-        for (int i = 1; i < Juego.getNumJugadores(); i++) {
-            if (Juego.getJugadores()[i].getPuntaje() > ganador.getPuntaje()) {
-                ganador = Juego.getJugadores()[i];
-            }
-        }
-        JOptionPane.showMessageDialog(null, "El ganador es " + ganador.getNombre(), "Partida finalizada", JOptionPane.INFORMATION_MESSAGE);
-        Juego.getJuego().dispose();
-        SalaDeEspera sala = new SalaDeEspera((java.awt.Frame) juego.getParent(), true, juego, Juego.getJugadores());
+        FrmSalaEspera sala = FrmSalaEspera.getInstance();
         sala.setVisible(true);
     }
 
+    /**
+     *
+     * @param jugador
+     */
     public void conectaJugador(Jugador jugador) {
-        if (jugadores.isEmpty()) {
-            jugador.setTurno(true);
-        }else{
-            jugador.setTurno(false);
-        }
         if (map.get(jugador.getNombre()) == null) {
-            jugadores.add(jugador);
             try {
+                getJugadores().add(jugador);
                 map.put(jugador.getNombre(), InetAddress.getLocalHost());
             } catch (UnknownHostException ex) {
-                Logger.getLogger(Control.class.getName()).log(Level.SEVERE, null, ex);
+                System.out.println(ex.getMessage());
             }
-
         }
-        SalaDeEspera.Conecta(jugadores);
-        conectados++;
+
+        FrmSalaEspera.getInstance().conectar(getJugadores());
+    }
+
+    /**
+     *
+     */
+    public void actualizarTablero() {
+
     }
 }

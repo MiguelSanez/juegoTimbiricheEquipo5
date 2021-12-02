@@ -5,15 +5,17 @@
  */
 package socket;
 
+import Dominio.Jugador;
 import control.InterpreteConexion;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.Iterator;
-import juegotimbiriche.Jugador;
+import java.util.List;
 
 /**
  *
@@ -21,89 +23,84 @@ import juegotimbiriche.Jugador;
  */
 public class Cliente extends Thread {
 
-    private static Cliente singleton = null;
-    private static ArrayList<Jugador> usuarios = new ArrayList<Jugador>();
-    private static InetAddress ip;
+    private static Cliente instance;
+    private List<Jugador> usuarios = new ArrayList<>();
+    private InetAddress ip;
     private static final int PORT = 5000;
-    private static DatagramSocket yo;
-    private static String recibido;
+    private DatagramSocket clientTunnel;
+    private Object recibido;
 
-    public static Cliente getCliente() {
-        if (singleton == null) {
-            singleton = new Cliente();
-        }
-        return singleton;
-    }
+    private InterpreteConexion interpreteConexion = InterpreteConexion.getInstance();
 
-    public void setIp(InetAddress ip) {
-        Cliente.ip = ip;
-        try {
-            yo = new DatagramSocket();
-        } catch (SocketException e) {
-            System.out.println(e.getMessage());
-            System.exit(1);
+    /**
+     *
+     * @return
+     */
+    public static Cliente getInstance() {
+        if (instance == null) {
+            instance = new Cliente();
         }
+        return instance;
     }
 
     private Cliente() {
     }
 
-    public void registrar(Jugador jugador) {
-        String mensaje = ".registra@" + jugador.toString();
-        byte[] registrarBuffer = new byte[100];
-        registrarBuffer = mensaje.getBytes();
-        DatagramPacket registrar = new DatagramPacket(registrarBuffer, registrarBuffer.length, ip, PORT);
+    public void setIp(InetAddress ip) {
+        this.ip = ip;
         try {
-            yo.send(registrar);
-        } catch (IOException ex) {
-            System.out.println(ex.getMessage());
-            System.exit(1);
+            clientTunnel = new DatagramSocket();
+        } catch (SocketException e) {
+            System.out.println(e.getMessage());
         }
     }
-    public void sendJugada(String jugada){
+
+    public void registrar(Jugador jugador) {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ObjectOutputStream out;
+
+        try {
+            out = new ObjectOutputStream(bos);
+            out.writeObject(jugador);
+            out.flush();
+            byte[] registrarBuffer = bos.toByteArray();
+            
+            System.out.println("Registrando datos: " + jugador);
+
+            DatagramPacket registrar = new DatagramPacket(registrarBuffer, registrarBuffer.length, ip, PORT);
+            clientTunnel.send(registrar);
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
+    public void sendJugada(Object jugada) {
         //formato de la jugada: ".Jugada@"
         String mensaje = ".Jugada@" + jugada;
-        byte[] registrarBuffer = new byte[100];
-        registrarBuffer = mensaje.getBytes();
+        byte[] registrarBuffer = mensaje.getBytes();
         DatagramPacket registrar = new DatagramPacket(registrarBuffer, registrarBuffer.length, ip, PORT);
         try {
-            yo.send(registrar);
+            clientTunnel.send(registrar);
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
-            System.exit(1);
         }
     }
-    
-    public void inicia(){
-        String mensaje = ".Inicia";
-        byte[] registrarBuffer = new byte[100];
-        registrarBuffer = mensaje.getBytes();
-        DatagramPacket registrar = new DatagramPacket(registrarBuffer, registrarBuffer.length, ip, PORT);
-        try {
-            yo.send(registrar);
-        } catch (IOException ex) {
-            System.out.println(ex.getMessage());
-            System.exit(1);
-        }
-    }
-    
-    private void conecta() {
-        //formato de registro ".conecta@color1,color2,color3,nombre"
-        String[] info = recibido.split("@");
-        String[] infoJ = info[1].split(",");
 
-        Jugador c = new Jugador();
-        c.setNombre(infoJ[3]);
-        int[] color = new int[3];
-        for (int i = 0; i < color.length; i++) {
-            int j = Integer.parseInt(infoJ[i]);
-            color[i] = j;
+    public void inicia() {
+        String mensaje = ".Inicia";
+        byte[] registrarBuffer = mensaje.getBytes();
+        DatagramPacket registrar = new DatagramPacket(registrarBuffer, registrarBuffer.length, ip, PORT);
+        try {
+            clientTunnel.send(registrar);
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
         }
-        c.setColor(color);
-        usuarios.add(c);
-        InterpreteConexion.interpretar("JugadorConexion@" + c.toString());
     }
-    
+
+    public void conecta() {
+        usuarios.add((Jugador) recibido);
+        interpreteConexion.interpretar(0, recibido);
+    }
 
     @Override
     public void run() {
@@ -113,22 +110,11 @@ public class Cliente extends Thread {
             try {
                 bufferR = new byte[100];
                 paquete = new DatagramPacket(bufferR, bufferR.length);
-                yo.receive(paquete);
-                recibido = new String(paquete.getData());
+                clientTunnel.receive(paquete);
+                recibido = paquete.getData();
             } catch (IOException e) {
                 System.out.println(e.getMessage());
-                System.exit(1);
             }//recibe mensaje entrante
-            if (recibido.startsWith(".conecta")) {
-                this.conecta();
-            }//conecta
-            else if (recibido.startsWith(".Jugada")) {
-                String jugada=recibido.split("@")[1];
-                InterpreteConexion.interpretar("Jugada@"+jugada);
-            }//Jugada
-            else if (recibido.startsWith(".Inicia")) {
-                InterpreteConexion.interpretar("Inicia");
-            }
         }//while
 
     }//run
